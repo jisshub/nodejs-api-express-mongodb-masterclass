@@ -199,3 +199,89 @@ app.use('/api/v1/bootcamps', bootcamps);
 
 - v doesnt have to set _/api/v1/bootcamps_
   for the all routes in bootcamp.js.
+
+## creating controller methods
+
+_creating controller methods for each routes_.
+
+- create controller folder
+- create bootcamps.js for creatng controller.
+- in this files, v create controller method associated with each routes in routes folder.
+
+_controller/bootcamps.js_
+
+```javascript
+// create controller method for each routes
+// and export
+
+// @desc - get all bootcamps
+// @access- public - no authentication required
+// route - GET /api/v1/bootcamps
+
+exports.getBootcamps = (req, res, next) => {
+  res.status(200).json({ success: true, msg: `show all bootcamps` });
+};
+
+// @desc - get a bootcamps
+// @access- public - no authentication required
+// route - GET /api/v1/bootcamps/:id
+
+exports.getSingleBootcamp = (req, res, next) => {
+  res
+    .status(200)
+    .json({ success: true, msg: `got bootcamp with id ${req.params.id}` });
+};
+
+// @desc - post a bootcamp
+// @access- private - authentication required
+// route - POST /api/v1/bootcamps
+
+exports.createBootcamp = (req, res, next) => {
+  res.status(200).json({ success: true, msg: 'posted new bootcamp' });
+};
+
+// @desc - update a bootcamp
+// @access- private - authentication required
+// route - PUT /api/v1/bootcamps/:id
+
+exports.updateBootcamp = (req, res, next) => {
+  res
+    .status(200)
+    .json({ success: true, msg: `updated bootcamp with id ${req.params.id}` });
+};
+
+// @desc - delete a bootcamp
+// @access- private - authentication required
+// route - PUT /api/v1/bootcamps/:id
+
+exports.deleteBootcamp = (res, req, next) => {
+  res
+    .status(200)
+    .json({ success: true, msg: `deleted bootcamp with id ${req.params.id}` });
+};
+```
+
+- now v need to require this controller methods in routes files.
+
+_routes/bootcamps.js_
+
+```javascript
+// require controller methods using destructuring
+const {
+  getBootcamps,
+  getSingleBootcamp,
+  createBootcamp,
+  updateBootcamp,
+  deleteBootcamp,
+} = require('../controllers/bootcamps');
+
+// set routers for get and post that having no params
+router.route('/').get(getBootcamps).post(createBootcamp);
+
+// set a seperate routers for put, delete, get with params having id.
+router
+  .route('/:id')
+  .get(getSingleBootcamp)
+  .put(updateBootcamp)
+  .delete(deleteBootcamp);
+```
