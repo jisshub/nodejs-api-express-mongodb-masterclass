@@ -31,7 +31,7 @@
 - as part of development - use nodemon - nodemon automatically detects the changes v make.
 
 * touch server.js
-* mkdir -config
+* mkdir -v config
 * cd condig && touch config.env
 
 **config.env**
