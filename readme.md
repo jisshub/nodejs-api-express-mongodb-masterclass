@@ -285,3 +285,64 @@ router
   .put(updateBootcamp)
   .delete(deleteBootcamp);
 ```
+
+## middleware
+
+- function that has access to request response cycle.
+
+**server.js**
+
+```javascript
+// define a middleware
+const logger = (req, res, next) => {
+  req.hello = 'hello node';
+  console.log(req.hello);
+  // call next() to move to next middleware in the cycle
+  next();
+};
+
+// using above middleware
+app.use(logger);
+```
+
+this _req.hello_ object can be accesses anywhere from controllers.
+
+**controllers/bootcamps.js**
+
+```javascript
+exports.getBootcamps = (req, res, next) => {
+  res
+    .status(200)
+    .json({ success: true, msg: `show all bootcamps`, middlware: req.hello });
+};
+```
+
+**use middleswares in separte folder**
+
+- create middleswarew directpory.
+- create a js file
+- define middleware and export it
+- require the middleware in server.js
+- use the middleware there.
+
+### using thrid party middleware _morgan_
+
+```shell
+npm i morgan
+```
+
+**definition**
+
+- Morgan is a HTTP request logger middleware for node.js.
+
+**server.js**
+
+```javascript
+// require morgan middleware
+const morgan = require('morgan');
+// use morgan middlware
+if (process.env.NODE_ENV === 'development') {
+  // use morgan- pass any argument.
+  app.use(morgan('tiny'));
+}
+```

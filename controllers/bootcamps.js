@@ -6,7 +6,9 @@
 // route - GET /api/v1/bootcamps
 
 exports.getBootcamps = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `show all bootcamps` });
+  res
+    .status(200)
+    .json({ success: true, msg: `show all bootcamps`, middlware: req.hello });
 };
 
 // @desc - get a bootcamps
