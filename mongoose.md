@@ -302,3 +302,20 @@ exports.updateBootcamp = async (req, res, next) => {
   }
 };
 ```
+
+## DELETE - delete a bootcamp with id
+
+```javascript
+exports.deleteBootcamp = async (req, res, next) => {
+  try {
+    // find the collection and delete
+    await Bootcamp.findByIdAndDelete(req.params.id);
+    // sent the response back
+    res.status(200).json({ success: true, msg: 'data deleted' });
+
+    // if any error in try block catch here
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+};
+```

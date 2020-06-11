@@ -85,7 +85,7 @@ exports.updateBootcamp = async (req, res, next) => {
 
     // if any other errors in try block, catch here
   } catch (error) {
-    res.status(200).json({ error });
+    res.status(200).json({ error: error });
   }
 };
 
@@ -95,9 +95,13 @@ exports.updateBootcamp = async (req, res, next) => {
 
 exports.deleteBootcamp = async (req, res, next) => {
   try {
-    const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+    // find the collection and delete
+    await Bootcamp.findByIdAndDelete(req.params.id);
+    // sent the response back
+    res.status(200).json({ success: true, msg: 'data deleted' });
 
-    if (!bootcamp) {
-    }
-  } catch (error) {}
+    // if any error in try block catch here
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 };
