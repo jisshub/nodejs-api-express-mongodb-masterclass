@@ -308,7 +308,7 @@ exports.updateBootcamp = async (req, res, next) => {
 ```javascript
 exports.deleteBootcamp = async (req, res, next) => {
   try {
-    // find the collection and delete
+    // find the document and delete
     await Bootcamp.findByIdAndDelete(req.params.id);
     // sent the response back
     res.status(200).json({ success: true, msg: 'data deleted' });
