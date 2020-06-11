@@ -183,9 +183,7 @@ module.exports = mongoose.Model('Bootcamp', BootcampSchema);
 
 - enum - only value it posses - cant give other values - if provides other vakue - that is rejected.
 
----
-
-Example
+* Example
 
 enum: [
 'Web Development',
@@ -196,15 +194,13 @@ enum: [
 'Other',
 ]
 
----
-
 - if given other values- that value is rejected.
 
 * Slug and Name fields
 
----
+```json
 
 "name": "Devworks Bootcamp"
 "slug": "devworks-bootcamp",
 
----
+```
