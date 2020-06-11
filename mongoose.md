@@ -185,14 +185,16 @@ module.exports = mongoose.Model('Bootcamp', BootcampSchema);
 
 * Example
 
+```javascript
 enum: [
-'Web Development',
-'Data Science',
-'Mobile Development',
-'UI/UX',
-'Business',
-'Other',
-]
+  'Web Development',
+  'Data Science',
+  'Mobile Development',
+  'UI/UX',
+  'Business',
+  'Other',
+];
+```
 
 - if given other values- that value is rejected.
 
