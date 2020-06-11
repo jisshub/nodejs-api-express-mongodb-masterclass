@@ -30,8 +30,15 @@ exports.getSingleBootcamp = async (req, res, next) => {
   try {
     // use findById()
     const bootcamp = await Bootcamp.findById(req.params.id);
+
+    // if no bootcamp exist
+    if (!bootcamp) {
+      return res.status(400).json({ success: false });
+    }
     // send the response
     res.status(200).json({ success: true, data: bootcamp });
+
+    // if any other errors in try block, catch here
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -63,18 +70,34 @@ exports.createBootcamp = async (req, res, next) => {
 // @access- private - authentication required
 // route - PUT /api/v1/bootcamps/:id
 
-exports.updateBootcamp = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: `updated bootcamp with id ${req.params.id}` });
+exports.updateBootcamp = async (req, res, next) => {
+  try {
+    // set id, body, run mongoose validators on updated data
+    const bootcamp = await Bootamp.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    // if no bootcamp exist
+    if (!bootcamp) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: bootcamp });
+
+    // if any other errors in try block, catch here
+  } catch (error) {
+    res.status(200).json({ error });
+  }
 };
 
 // @desc - delete a bootcamp
 // @access- private - authentication required
 // route - PUT /api/v1/bootcamps/:id
 
-exports.deleteBootcamp = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: `deleted bootcamp with id ${req.params.id}` });
+exports.deleteBootcamp = async (req, res, next) => {
+  try {
+    const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+
+    if (!bootcamp) {
+    }
+  } catch (error) {}
 };

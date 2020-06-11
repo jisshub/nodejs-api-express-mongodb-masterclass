@@ -258,7 +258,7 @@ exports.getBootcamps = async (req, res, next) => {
 };
 ```
 
-## get a sinfgle bootcamp using id
+## GET a single bootcamp using id
 
 ```javascript
 exports.getSingleBootcamp = async (req, res, next) => {
@@ -266,10 +266,39 @@ exports.getSingleBootcamp = async (req, res, next) => {
     // use findById()
     const bootcamp = await Bootcamp.findById(req.params.id);
 
-    // send back the res[onsense
+    // if no bootcamp exist
+    if (!bootcamp) {
+      return res.status(400).json({ success: false });
+    }
+    // send the response
     res.status(200).json({ success: true, data: bootcamp });
+
+    // if any other errors in try block, catch here
   } catch (error) {
     res.status(400).json({ error });
+  }
+};
+```
+
+## PUT - update a bootcamp using id
+
+```javascript
+exports.updateBootcamp = async (req, res, next) => {
+  try {
+    // set id, body, run mongoose validators on updated data
+    const bootcamp = await Bootamp.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    // if no bootcamp exist
+    if (!bootcamp) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: bootcamp });
+
+    // if any other errors in try block, catch here
+  } catch (error) {
+    res.status(200).json({ error });
   }
 };
 ```
