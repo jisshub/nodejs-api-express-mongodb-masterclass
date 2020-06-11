@@ -243,7 +243,9 @@ exports.createBootcamp = async (req, res, next) => {
 ```javascript
 exports.getBootcamps = async (req, res, next) => {
   try {
+    // use find() to get all data.
     const bootcamps = await Bootcamp.find();
+    // send back the response to the client
     res.status(200).json({
       success: true,
       data: bootcamps,
