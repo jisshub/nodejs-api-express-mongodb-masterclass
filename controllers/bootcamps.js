@@ -1,3 +1,6 @@
+// require the models
+const Bootcamp = require('../models/Bootcamp');
+
 // create controller method for each routes
 // and export
 
@@ -5,28 +8,57 @@
 // @access- public - no authentication required
 // route - GET /api/v1/bootcamps
 
-exports.getBootcamps = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: `show all bootcamps`, middlware: req.hello });
+exports.getBootcamps = async (req, res, next) => {
+  try {
+    const bootcamps = await Bootcamp.find();
+    res.status(200).json({
+      success: true,
+      data: bootcamps,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
 };
 
 // @desc - get a bootcamps
 // @access- public - no authentication required
 // route - GET /api/v1/bootcamps/:id
 
-exports.getSingleBootcamp = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: `got bootcamp with id ${req.params.id}` });
+exports.getSingleBootcamp = async (req, res, next) => {
+  try {
+    const bootcamp = await Bootcamp.findById(req.params.id, (err, res) => {
+      res.status(200).json({
+        success: true,
+        data: bootcamp,
+      });
+    });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
 
 // @desc - post a bootcamp
 // @access- private - authentication required
 // route - POST /api/v1/bootcamps
 
-exports.createBootcamp = (req, res, next) => {
-  res.status(200).json({ success: true, msg: 'posted new bootcamp' });
+exports.createBootcamp = async (req, res, next) => {
+  {
+    try {
+      // await for the Promise to get resolved
+      const bootcamp = await Bootcamp.create(req.body);
+
+      // send back the resposne - 201: since new resource created
+      res.status(201).json({
+        succes: true,
+        data: bootcamp,
+      });
+      // if any error, catch the error
+    } catch (error) {
+      res.status(400).json({ error });
+    }
+  }
 };
 
 // @desc - update a bootcamp

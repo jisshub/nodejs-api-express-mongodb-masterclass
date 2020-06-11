@@ -176,7 +176,7 @@ const BootcampSchema = mongoose.Schema({
 });
 
 // export the schema created
-module.exports = mongoose.Model('Bootcamp', BootcampSchema);
+module.exports = mongoose.model('Bootcamp', BootcampSchema);
 ```
 
 - **Bootcamp** is the model created automatcally,
@@ -205,4 +205,53 @@ enum: [
 "name": "Devworks Bootcamp"
 "slug": "devworks-bootcamp",
 
+```
+
+**controllers/bootcamp.js**
+
+## POST data - create bootcamp
+
+```javascript
+// require Bootcamp Model
+const Bootcamp = require('../models/Bootcamp');
+
+exports.createBootcamp = async (req, res, next) => {
+  {
+    try {
+      // await for the Promise to get resolved
+      const bootcamp = await Bootcamp.create(req.body);
+
+      // send back the resposne - 201: since new resource created
+      res.status(201).json({
+        succes: true,
+        data: bootcamp,
+      });
+      // if any error, catch the error
+    } catch (error) {
+      res.status(400).json({ error });
+    }
+  }
+};
+```
+
+---
+
+## NOTE: cant add a field to the database that re not in the model, mongodb will ignore that field from adding to the db. only the fields gven in the model is added to the db. but no error pops up if v try,
+
+## GET data - get all bootcamp
+
+```javascript
+exports.getBootcamps = async (req, res, next) => {
+  try {
+    const bootcamps = await Bootcamp.find();
+    res.status(200).json({
+      success: true,
+      data: bootcamps,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
 ```

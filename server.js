@@ -19,6 +19,9 @@ connectDB();
 // initialize express app
 const app = express();
 
+// parse the json data
+app.use(express.json());
+
 // use morgan middlware in devlelopment mode
 if (process.env.NODE_ENV === 'development') {
   // use morgan- pass any argument.

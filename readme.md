@@ -346,3 +346,22 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('tiny'));
 }
 ```
+
+---
+
+_req.body_ goves the json data.
+
+- using bodyparser to pase the json data
+
+```javascript
+app.use(express.json());
+```
+
+- it parses the json data.
+- v can get the body of the request
+
+```javascript
+console.log(req.body);
+```
+
+---

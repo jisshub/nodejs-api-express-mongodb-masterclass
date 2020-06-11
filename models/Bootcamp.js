@@ -28,7 +28,7 @@ const BootcampSchema = mongoose.Schema({
   phone: {
     type: String,
     unique: true,
-    maxlength: [15, 'not more than 15'],
+    maxlength: [20, 'not more than 15'],
     required: [true, 'phone number required'],
   },
   email: {
@@ -47,11 +47,9 @@ const BootcampSchema = mongoose.Schema({
     type: {
       type: String,
       enum: ['Point'], // 'location.type' must be 'Point'
-      required: true,
     },
     coordinates: {
       type: [Number],
-      required: true,
       index: '2dsphere',
     },
     formattedAddress: String,
@@ -61,7 +59,7 @@ const BootcampSchema = mongoose.Schema({
     country: String,
     zipcode: String,
   },
-  career: {
+  careers: {
     //   array of strings
     type: [String],
     enum: [
@@ -73,6 +71,10 @@ const BootcampSchema = mongoose.Schema({
       'Other',
     ],
   },
+  housing: {
+    type: Boolean,
+    default: false,
+  },
   averageRating: {
     type: Number,
     min: [1, 'mininum rating is atleast 1'],
@@ -82,10 +84,6 @@ const BootcampSchema = mongoose.Schema({
   photo: {
     type: String,
     default: 'no-photo.jpg',
-  },
-  housing: {
-    type: Boolean,
-    default: false,
   },
   jobAssistance: {
     type: Boolean,
@@ -107,6 +105,6 @@ const BootcampSchema = mongoose.Schema({
 });
 
 // export the schema created
-module.exports = mongoose.Model('Bootcamp', BootcampSchema);
+module.exports = mongoose.model('Bootcamp', BootcampSchema);
 
 // Bootcamp is the model created automatcally,
