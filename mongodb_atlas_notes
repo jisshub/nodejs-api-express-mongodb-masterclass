@@ -1,0 +1,18 @@
+- build the cluster
+
+- add new db user, database access sidebar
+
+- whitleist the ip address in network access 
+
+- connect to the cluster - selected connect to mongodb cokmpass- copy
+the connecttion string - paste the conection in compass and hange the password
+ijn the connection string
+
+- click connect
+
+
+username: jissmonJose
+password: YsX6ghrRid3aK9Fx
+
+
+
