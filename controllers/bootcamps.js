@@ -28,12 +28,10 @@ exports.getBootcamps = async (req, res, next) => {
 
 exports.getSingleBootcamp = async (req, res, next) => {
   try {
-    const bootcamp = await Bootcamp.findById(req.params.id, (err, res) => {
-      res.status(200).json({
-        success: true,
-        data: bootcamp,
-      });
-    });
+    // use findById()
+    const bootcamp = await Bootcamp.findById(req.params.id);
+    // send the response
+    res.status(200).json({ success: true, data: bootcamp });
   } catch (error) {
     res.status(400).json({ error });
   }

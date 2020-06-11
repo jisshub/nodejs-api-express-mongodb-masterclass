@@ -255,3 +255,19 @@ exports.getBootcamps = async (req, res, next) => {
   }
 };
 ```
+
+## get a sinfgle bootcamp using id
+
+```javascript
+exports.getSingleBootcamp = async (req, res, next) => {
+  try {
+    // use findById()
+    const bootcamp = await Bootcamp.findById(req.params.id);
+
+    // send back the res[onsense
+    res.status(200).json({ success: true, data: bootcamp });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+```
