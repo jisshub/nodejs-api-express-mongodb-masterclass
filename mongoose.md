@@ -228,7 +228,7 @@ exports.createBootcamp = async (req, res, next) => {
       });
       // if any error, catch the error
     } catch (error) {
-      res.status(400).json({ error });
+      res.status(400).json({ error, msg: error.message });
     }
   }
 };
@@ -253,7 +253,7 @@ exports.getBootcamps = async (req, res, next) => {
     });
   } catch (error) {
     res.status(400).json({
-      error,
+      error, msg: error.message
     });
   }
 };
@@ -276,7 +276,7 @@ exports.getSingleBootcamp = async (req, res, next) => {
 
     // if any other errors in try block, catch here
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json({ error, msg: error.message });
   }
 };
 ```
@@ -300,7 +300,7 @@ exports.updateBootcamp = async (req, res, next) => {
 
     // if any other errors in try block, catch here
   } catch (error) {
-    res.status(200).json({ error });
+    res.status(200).json({ error, msg: error.message });
   }
 };
 ```
@@ -317,7 +317,7 @@ exports.deleteBootcamp = async (req, res, next) => {
 
     // if any error in try block catch here
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(400).json({ error: error, msg: error.message });
   }
 };
 ```
