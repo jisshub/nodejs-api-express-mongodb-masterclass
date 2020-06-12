@@ -349,19 +349,22 @@ if (process.env.NODE_ENV === 'development') {
 
 ---
 
-_req.body_ goves the json data.
+**req.body**
 
-- using bodyparser to pase the json data
+_req.body_ returns undefined
+- to get json data, we have to parse it
 
+- using bodyparser to parse the json data
+
+**server.js**
 ```javascript
 app.use(express.json());
 ```
-
-- it parses the json data.
+- it parsed to json data.
 - v can get the body of the request
 
 ```javascript
-console.log(req.body);
+console.log(req.body); // we get the data
 ```
 
 ---
