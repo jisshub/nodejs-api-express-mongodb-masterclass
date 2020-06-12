@@ -13,6 +13,7 @@ exports.getBootcamps = async (req, res, next) => {
     const bootcamps = await Bootcamp.find();
     res.status(200).json({
       success: true,
+      count: bootcamps.length,
       data: bootcamps,
     });
   } catch (error) {
@@ -97,6 +98,7 @@ exports.deleteBootcamp = async (req, res, next) => {
   try {
     // find the document and delete
     await Bootcamp.findByIdAndDelete(req.params.id);
+
     // sent the response back
     res.status(200).json({ success: true, msg: 'data deleted' });
 

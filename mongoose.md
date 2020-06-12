@@ -248,6 +248,7 @@ exports.getBootcamps = async (req, res, next) => {
     // send back the response to the client
     res.status(200).json({
       success: true,
+      count: bootacmps.length
       data: bootcamps,
     });
   } catch (error) {
