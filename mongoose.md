@@ -311,8 +311,12 @@ exports.updateBootcamp = async (req, res, next) => {
 exports.deleteBootcamp = async (req, res, next) => {
   try {
     // find the document and delete
-    await Bootcamp.findByIdAndDelete(req.params.id);
-    // sent the response back
+    const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+    // if no data found
+    if(!bootcamp){
+      return res.status(400).json({success: false, msg: "no data found"})
+    }
+    // else, sent the response back
     res.status(200).json({ success: true, msg: 'data deleted' });
 
     // if any error in try block catch here
