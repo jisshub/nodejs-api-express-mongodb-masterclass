@@ -286,7 +286,8 @@ exports.getSingleBootcamp = async (req, res, next) => {
 ```javascript
 exports.updateBootcamp = async (req, res, next) => {
   try {
-    // set id, body, run mongoose validators on updated data
+    // set id, req.body, run mongoose validators on updated data
+    // req.body is the new data which will update the current data.
     const bootcamp = await Bootamp.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
