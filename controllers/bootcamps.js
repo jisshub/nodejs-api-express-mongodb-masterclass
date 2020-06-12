@@ -16,10 +16,9 @@ exports.getBootcamps = async (req, res, next) => {
       count: bootcamps.length,
       data: bootcamps,
     });
-  } catch (error) {
-    res.status(400).json({
-      error,
-    });
+  } catch (err) {
+    // move to next middleware
+    next(err);
   }
 };
 
@@ -31,7 +30,6 @@ exports.getSingleBootcamp = async (req, res, next) => {
   try {
     // use findById()
     const bootcamp = await Bootcamp.findById(req.params.id);
-
     // if no bootcamp exist
     if (!bootcamp) {
       return res.status(400).json({ success: false });
@@ -40,8 +38,10 @@ exports.getSingleBootcamp = async (req, res, next) => {
     res.status(200).json({ success: true, data: bootcamp });
 
     // if any other errors in try block, catch here
-  } catch (error) {
-    res.status(400).json({ error });
+  } catch (err) {
+    // call next() and pass err.
+    next(err);
+    // if err, move to 'errorHandler' middleware
   }
 };
 

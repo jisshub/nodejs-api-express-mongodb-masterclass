@@ -4,6 +4,9 @@ const dotenv = require('dotenv');
 // require the xpress router exported
 const bootcamps = require('./routes/bootcamps');
 
+// ewquire erroHandler middleware
+const errorHandler = require('./middleware/error');
+
 // require morgan middleware
 const morgan = require('morgan');
 
@@ -22,7 +25,7 @@ const app = express();
 // parse the json data
 app.use(express.json());
 
-// use morgan middlware in devlelopment mode
+// use morgan middlware in devlelopment m ode
 if (process.env.NODE_ENV === 'development') {
   // use morgan- pass any argument.
   app.use(morgan('tiny'));
@@ -30,6 +33,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
+
+// use errorHandler middleware
+app.use(errorHandler);
 
 // set port - will listen to PORT 5000 always
 const PORT = process.env.PORT || 5000;
