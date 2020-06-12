@@ -48,6 +48,24 @@ exports.getSingleBootcamp = async (req, res, next) => {
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
 
-// always use errorHandler middleware below,
+// always use middleware below,
 app.use(errorHandler);
+```
+
+## using errorResponseclass
+
+**utils/errorResponse.js**
+
+```javascript
+// create a class that extends Error class
+class ErrorResponse extends Error {
+  // when instantiating the object takes two parameters
+  constructor(message, statusCode) {
+    //   call Error xlass constructor. use super() - pass message to it.
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+// export this class
+module.exports = ErrorResponse;
 ```

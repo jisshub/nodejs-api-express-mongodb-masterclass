@@ -1,6 +1,9 @@
 // require the models
 const Bootcamp = require('../models/Bootcamp');
 
+// require ErrorRepsone class
+const ErrorResponse = require('../utils/errorResponse');
+
 // create controller method for each routes
 // and export
 
@@ -30,18 +33,21 @@ exports.getSingleBootcamp = async (req, res, next) => {
   try {
     // use findById()
     const bootcamp = await Bootcamp.findById(req.params.id);
-    // if no bootcamp exist
+    // if no bootcamp exist, even though id is in correct format
     if (!bootcamp) {
-      return res.status(400).json({ success: false });
+      return next(
+        new ErrorResponse(`Bootcamp with id ${req.params.id} is not found`, 404)
+      );
+    } else {
+      // send the response
+      res.status(200).json({ success: true, data: bootcamp });
     }
-    // send the response
-    res.status(200).json({ success: true, data: bootcamp });
 
-    // if any other errors in try block, catch here
+    // if id is not in correct format / any other erros pops up.
   } catch (err) {
-    // call next() and pass err.
-    next(err);
-    // if err, move to 'errorHandler' middleware
+    next(
+      new ErrorResponse(`Bootcamp with id ${req.params.id} is not found`, 404)
+    );
   }
 };
 
