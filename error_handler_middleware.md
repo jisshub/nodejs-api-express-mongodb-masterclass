@@ -217,3 +217,29 @@ exports.deleteBootcamp = async (req, res, next) => {
   }
 };
 ```
+
+## mongoose error handling-part 2
+
+```javascript
+// mongoose duplicate field error- check using error code.
+// console.log(err.code);
+if (err.code === 11000) {
+  const message = `Resource with name ${err.keyValue.name} already exist`;
+  error = new ErrorResponse(message, 400);
+}
+
+// mongoose validation error - get err.name
+// console.log(err.name);
+if (err.name === 'ValidationError') {
+  // get each error values
+  const message = Object.values(err.errors);
+
+  error = new ErrorResponse(message, 400);
+}
+
+// finally return the response -> client wuth statucode.
+res.status(error.statusCode || 500).json({
+  success: false,
+  error: error.message,
+});
+```

@@ -65,7 +65,7 @@ exports.createBootcamp = async (req, res, next) => {
       });
       // if any error, catch the error
     } catch (err) {
-      // call next middleware
+      // call next middleware with the error
       next(err);
     }
   }
