@@ -1,7 +1,6 @@
 // require mongoose
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const geocoder = require('../utils/geocoder');
 
 // defne a Schema
 
@@ -116,15 +115,6 @@ BootcampSchema.pre('save', function (next) {
 
   console.log(this.slug);
   // move to next middleware
-  next();
-});
-
-// middleware- 2
-
-// create a location field suing geocoder before saving to db.
-BootcampSchema.pre('save', function (next) {
-  this.location = geocoder(this.address);
-
   next();
 });
 
