@@ -243,3 +243,58 @@ res.status(error.statusCode || 500).json({
   error: error.message,
 });
 ```
+
+## async/await middeware
+
+- refer: https://www.acuriousanimal.com/blog/2018/03/15/express-async-middleware
+
+- create a async middleware in middleware dir
+
+**middleware/async.js**
+
+```javascript
+// same code below 'Applying Some Dry' section in above article.
+
+const asyncHandler = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+module.exports = asyncHandler;
+```
+
+- next rewrite the controllers by removing try/catch blocks.
+
+**controllers/bootcamp.js**
+
+```javascript
+exports.getBootcamps = asyncHandler(async (req, res, next) => {
+  const bootcamps = await Bootcamp.find();
+
+  res.status(200).json({
+    success: true,
+    count: bootcamps.length,
+    data: bootcamps,
+  });
+});
+
+// @desc - get a bootcamps
+// @access- public - no authentication required
+// route - GET /api/v1/bootcamps/:id
+
+exports.getSingleBootcamp = asyncHandler(async (req, res, next) => {
+  // use findById()
+  const bootcamp = await Bootcamp.findById(req.params.id);
+  // if no bootcamp exist, even though id is in correct format
+  if (!bootcamp) {
+    // call next middleware
+    return next(
+      new ErrorResponse(`Bootcamp with id ${req.params.id} is not found`)
+    );
+  } else {
+    // send the response
+    res.status(200).json({ success: true, data: bootcamp });
+  }
+});
+```
+
+- same stratgey in case of all other controllers
