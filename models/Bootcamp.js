@@ -1,5 +1,6 @@
 // require mongoose
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 // defne a Schema
 
@@ -102,6 +103,10 @@ const BootcampSchema = mongoose.Schema({
     // set to current date and time
     default: Date.now,
   },
+});
+
+BootcampSchema.pre('save', (next) => {
+  next();
 });
 
 // export the schema created

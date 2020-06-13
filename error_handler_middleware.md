@@ -298,3 +298,7 @@ exports.getSingleBootcamp = asyncHandler(async (req, res, next) => {
 ```
 
 - same stratgey in case of all other controllers
+
+---
+
+## creating a slug from bootcamp name field
