@@ -90,7 +90,7 @@ function errorHandler(err, req, res, next) {
     // instantiate errorRespose object
     error = new ErrorResponse(message, 404);
   }
-  // if any other error like server error
+  // finally return the response -> cliebnt wuth statucode.
   res.status(error.statusCode || 500).json({
     success: false,
     error: error.message,

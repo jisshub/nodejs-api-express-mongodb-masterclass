@@ -58,7 +58,6 @@ exports.createBootcamp = async (req, res, next) => {
     try {
       // await for the Promise to get resolved
       const bootcamp = await Bootcamp.create(req.body);
-
       // send back the resposne - 201: since new resource created
       res.status(201).json({
         succes: true,
