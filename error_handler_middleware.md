@@ -35,7 +35,7 @@ exports.getSingleBootcamp = async (req, res, next) => {
   } catch (err) {
     // call next() and pass err.
     next(err);
-    // if err, move to 'errorHandler' middleware
+    // use the  middleare
   }
 };
 ```
@@ -48,7 +48,7 @@ exports.getSingleBootcamp = async (req, res, next) => {
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
 
-// always use middleware below,
+// use middleware erroHandler,
 app.use(errorHandler);
 ```
 
