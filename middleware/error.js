@@ -7,9 +7,9 @@ function errorHandler(err, req, res, next) {
   // assign error message to error.message
   error.message = err.message;
 
-  // if the id is not correct format/not found a resource with that id
-  console.log(err.name);
+  console.log(err);
 
+  // if the id is not correct format/not found a resource with that id
   if (err.name === 'CastError') {
     // set an error message
     const message = `Resource with id ${err.value} is not found`;
