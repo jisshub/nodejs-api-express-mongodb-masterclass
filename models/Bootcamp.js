@@ -105,7 +105,15 @@ const BootcampSchema = mongoose.Schema({
   },
 });
 
-BootcampSchema.pre('save', (next) => {
+// runs before document is saved to the db.
+// dont use callback fn here,
+
+BootcampSchema.pre('save', function (next) {
+  // create a slug field using name field
+  this.slug = slugify(this.name, { lower: true });
+
+  console.log(this.slug);
+  // move to next middleware
   next();
 });
 

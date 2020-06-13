@@ -302,3 +302,31 @@ exports.getSingleBootcamp = asyncHandler(async (req, res, next) => {
 ---
 
 ## creating a slug from bootcamp name field
+
+we have gievn a a slug field in the model,
+so the job is to a create a slug field in the dpcument
+using name field of model before saving the final
+document to the db. once created the field, document is saved tp database.
+
+```javascript
+// pre() runs before document is saved to the db.
+// dont use callback fn here,
+
+BootcampSchema.pre('save', function (next) {
+  // create a slug field using name field
+  this.slug = slugify(this.name, { lower: true });
+  // move to next middleware
+  next();
+});
+
+// pre()- runs prior to the specified operation.
+// save - operation to be done.
+// { lower: true } - field should be a lowercase
+```
+
+**Example**
+
+```bash
+  name = "DevWork Bootcamp"
+  slug = "devwork-bootcamp"
+```
