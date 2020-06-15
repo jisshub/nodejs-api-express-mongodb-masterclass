@@ -12,6 +12,20 @@ const asyncHandler = require('../middleware/async');
 
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
   let query;
+
+  //make a copy of req.query
+  const reqQuery = { ...req.query };
+  console.log(reqQuery);
+
+  // fields to exclude,
+  const removeFields = ['select'];
+
+  // loop thru removeField array and delete each element - here v remove select from array
+  removeFields.forEach((params) => delete reqQuery[params]);
+
+  // log the reqQuery
+  console.log(reqQuery);
+
   // convert js object to json string.
   let queryStr = JSON.stringify(req.query);
   // gives,  {"averageCost":{"lte":"8000"}}
@@ -23,7 +37,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
   );
   // v concatenate with $ with matched value,
 
-  console.log(queryStr); // {"averageCost":{"$lte":"8000"}}
+  // console.log(queryStr); // {"averageCost":{"$lte":"8000"}}
 
   // pass queryStr to query - parse it to js object
   query = Bootcamp.find(JSON.parse(queryStr));
