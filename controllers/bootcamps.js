@@ -12,7 +12,8 @@ const asyncHandler = require('../middleware/async');
 
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
   const bootcamps = await Bootcamp.find();
-
+  // get query params from api
+  console.log(req.query);
   res.status(200).json({
     success: true,
     count: bootcamps.length,

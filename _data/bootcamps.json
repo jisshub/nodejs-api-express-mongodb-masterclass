@@ -8,6 +8,13 @@
     "phone": "(111) 111-1111",
     "email": "enroll@devworks.com",
     "address": "233 Bay State Rd Boston MA 02215",
+    "location": {
+      "street": "Bay State Rd",
+      "city": "Boston",
+      "state": "MA",
+      "country": "USA",
+      "zipcode": 13290
+    },
     "careers": ["Web Development", "UI/UX", "Business"],
     "housing": true,
     "jobAssistance": true,
@@ -23,6 +30,13 @@
     "phone": "(222) 222-2222",
     "email": "enroll@moderntech.com",
     "address": "220 Pawtucket St, Lowell, MA 01854",
+    "location": {
+      "street": "Pawtucket St",
+      "city": "Lowell",
+      "state": "MA",
+      "country": "USA",
+      "zipcode": 65454
+    },
     "careers": ["Web Development", "UI/UX", "Mobile Development"],
     "housing": false,
     "jobAssistance": true,
@@ -38,6 +52,13 @@
     "phone": "(333) 333-3333",
     "email": "enroll@codemasters.com",
     "address": "85 South Prospect Street Burlington VT 05405",
+    "location": {
+      "street": "South Prospect Street",
+      "city": "Burlington",
+      "state": "VT",
+      "country": "USA",
+      "zipcode": 74422
+    },
     "careers": ["Web Development", "Data Science", "Business"],
     "housing": false,
     "jobAssistance": false,
@@ -53,6 +74,13 @@
     "phone": "(444) 444-4444",
     "email": "enroll@devcentral.com",
     "address": "45 Upper College Rd Kingston RI 02881",
+    "location": {
+      "street": "Upper College Rd",
+      "city": "Kingston",
+      "state": "RI",
+      "country": "USA",
+      "zipcode": 56565
+    },
     "careers": [
       "Mobile Development",
       "Web Development",

@@ -4,7 +4,6 @@ const Bootcamp = require('./models/Bootcamp');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const colors = require('colors');
-const { dirname } = require('path');
 
 // load env vars
 dotenv.config({ path: './config/config.env' });
