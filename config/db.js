@@ -1,5 +1,6 @@
 // require mongoose here
 const mongoose = require('mongoose');
+const { red, blue } = require('colors');
 
 // connect to db
 const connectDB = async () => {
@@ -11,7 +12,7 @@ const connectDB = async () => {
     useUnifiedTopology: true,
   });
 
-  console.log('MongoDb Connected to ' + conn.connection.host);
+  console.log(`MongoDb Connected to ' ${conn.connection.host}`.cyan.inverse);
 };
 
 // export the

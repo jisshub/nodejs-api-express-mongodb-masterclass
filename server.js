@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const colors = require('colors');
 
 // require the xpress router exported
 const bootcamps = require('./routes/bootcamps');
@@ -42,7 +43,9 @@ const PORT = process.env.PORT || 5000;
 
 // listen to port
 const server = app.listen(PORT, () => {
-  console.log(`App runs in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log(
+    `App runs in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
+  );
 });
 
 // handle unhandled rejections

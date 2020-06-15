@@ -11,9 +11,25 @@ const asyncHandler = require('../middleware/async');
 // route - GET /api/v1/bootcamps
 
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-  const bootcamps = await Bootcamp.find();
+  let query;
+  // convert js object to json string.
+  let queryStr = JSON.stringify(req.query);
+  // gives,  {"averageCost":{"lte":"8000"}}
+
+  // replace lte with $lte,
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+  // v concatenate with $ with matched value,
+
+  console.log(queryStr); // {"averageCost":{"$lte":"8000"}}
+
+  // pass queryStr to query - parse it to js object
+  query = Bootcamp.find(JSON.parse(queryStr));
+
+  const bootcamps = await query;
   // get query params from api
-  console.log(req.query);
   res.status(200).json({
     success: true,
     count: bootcamps.length,
