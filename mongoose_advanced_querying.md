@@ -23,7 +23,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 
 - GET /api/v1/bootcamps?averageCost[lt]=8000
 
-@desc - get documents with avarage cost < 8000
+@desc - get documents having a field named averageCost < 8000.
 
 - in console, req.query be like,
 
