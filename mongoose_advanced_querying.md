@@ -65,3 +65,5 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 - GET {{URL}}/api/v1/bootcamps?careers[in]=Mobile Development
 
 - @desc: GET THE DOCUMENTS THAT CONTAINS A careers ARRAY HAVING 'Mobile Development' as value.
+
+## selection and sorting of data
