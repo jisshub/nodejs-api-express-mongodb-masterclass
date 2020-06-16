@@ -9,8 +9,13 @@ const {
   createBootcamp,
   updateBootcamp,
   deleteBootcamp,
-  getFieldsBootcamp,
 } = require('../controllers/bootcamps');
+
+//
+const courseRouter = require('./courses');
+
+// re-route to other routers
+router.use('/:bootcampId/courses', courseRouter);
 
 // set routers for get and post with no params
 router.route('/').get(getBootcamps).post(createBootcamp);

@@ -5,6 +5,7 @@ const colors = require('colors');
 // require the xpress router exported
 const bootcamps = require('./routes/bootcamps');
 
+const courses = require('./routes/courses');
 // ewquire erroHandler middleware
 const errorHandler = require('./middleware/error');
 
@@ -13,6 +14,7 @@ const morgan = require('morgan');
 
 // require connectDB
 const connectDB = require('./config/db');
+const Courses = require('./models/Courses');
 
 // configure dotenv - laod env variables
 dotenv.config({ path: './config/config.env' });
@@ -34,6 +36,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
+
+// use courses routers
+app.use('/api/v1/courses', courses);
 
 // use errorHandler middleware
 app.use(errorHandler);
