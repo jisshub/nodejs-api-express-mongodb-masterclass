@@ -67,3 +67,66 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 - @desc: GET THE DOCUMENTS THAT CONTAINS A careers ARRAY HAVING 'Mobile Development' as value.
 
 ## selection and sorting of data
+
+- api
+
+* GET {{URL}}/api/v1/bootcamps?select=name,description
+
+* {{URL}}/api/v1/bootcamps?select=name,description&sort=name
+
+```javascript
+exports.getBootcamps = asyncHandler(async (req, res, next) => {
+  let query;
+
+  //make a copy of req.query
+  const reqQuery = { ...req.query };
+
+  // fields to exclude,
+  const removeFields = ['select'];
+
+  // loop thru removeField array and delete each element - here v remove 'select' param from array
+  removeFields.forEach((params) => delete reqQuery[params]);
+
+  // // log the reqQuery
+  // console.log(reqQuery);
+
+  // convert js object to json string.
+  let queryStr = JSON.stringify(req.query);
+  // gives,  {"averageCost":{"lte":"8000"}}
+
+  // replace lte with $lte,
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+  // v concatenate with $ with matched value,
+
+  // console.log(queryStr); // {"averageCost":{"$lte":"8000"}}
+
+  // pass queryStr to query - parse it to js object
+  query = Bootcamp.find(JSON.parse(queryStr));
+
+  //select fields
+  if (req.query.select) {
+    // split the fields and convert to string
+    const fields = req.query.select.split(',').join(' ');
+    query = query.select(fields);
+  }
+  // sorting by fields
+  if (req.query.sort) {
+    const sortBy = req.query.select.split(',').join(' ');
+    query = query.sort(sortBy);
+    console.log(query);
+  } else {
+    query = query.sort('-createdAt');
+  }
+
+  const bootcamps = await query;
+  // get query params from api
+  res.status(200).json({
+    success: true,
+    count: bootcamps.length,
+    data: bootcamps,
+  });
+});
+```

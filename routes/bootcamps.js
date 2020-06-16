@@ -9,6 +9,7 @@ const {
   createBootcamp,
   updateBootcamp,
   deleteBootcamp,
+  getFieldsBootcamp,
 } = require('../controllers/bootcamps');
 
 // set routers for get and post with no params
