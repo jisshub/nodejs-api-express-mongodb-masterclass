@@ -146,7 +146,7 @@ router.route('/').get(getCourses);
 module.exports = router;
 ```
 
-**controllers/bootcamps.js**
+**routes/bootcamps.js**
 
 ```javascript
 // re-route to other routers
