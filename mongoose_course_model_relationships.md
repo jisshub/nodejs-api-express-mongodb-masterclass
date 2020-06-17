@@ -93,9 +93,9 @@ const deleteData = async () => {
 
 ---
 
-- GET {{URL}}/api/v1/courses/
+- GET {{URL}}/api/v1/courses/  -> get all courses
 
-- GET {{URL}}/api/v1/bootcamps/5d713995b721c3bb38c1f5d0/courses
+- GET {{URL}}/api/v1/bootcamps/5d713995b721c3bb38c1f5d0/courses -> get courses of a bootcamp
 
 ---
 
