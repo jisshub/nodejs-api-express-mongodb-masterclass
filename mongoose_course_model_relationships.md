@@ -93,9 +93,9 @@ const deleteData = async () => {
 
 ---
 
-- GET {{URL}}/api/v1/courses/
+- GET {{URL}}/api/v1/courses/  -> get all courses
 
-- GET {{URL}}/api/v1/bootcamps/5d713995b721c3bb38c1f5d0/courses
+- GET {{URL}}/api/v1/bootcamps/5d713995b721c3bb38c1f5d0/courses -> get courses of a bootcamp
 
 ---
 
@@ -133,7 +133,7 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
 **routes/courses.js**
 
 ```javascript
-// set mergeParams to true
+// set mergeParams to true - used to merge params from other routes 
 const router = express.Router({ mergeParams: true });
 // create routes
 
@@ -146,13 +146,13 @@ router.route('/').get(getCourses);
 module.exports = router;
 ```
 
-**controllers/bootcamps.js**
+**routes/bootcamps.js**
 
 ```javascript
-// re-route to other routers
+// re-route/use courseRouter.
 router.use('/:bootcampId/courses', courseRouter);
 
-// here v basically re route to courseRouter. when there is above given params is given
+// here v basically re route to courseRouter. when there is above given api is given
 ```
 
 ## using populate() to get the data from other model,
