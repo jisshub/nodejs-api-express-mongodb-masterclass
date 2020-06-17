@@ -154,3 +154,16 @@ router.use('/:bootcampId/courses', courseRouter);
 
 // here v basically re route to courseRouter. when there is above given params is given
 ```
+
+## using populate() to get the data from other model,
+
+**controllers/courses.js**
+
+```javascript
+query = Courses.find().populate('bootcamp', 'name description');
+
+// get courses along with bootcamp name and description
+```
+
+- _bootcamp_ - fiels in course,
+- _name, description_ - fields needed from bootcamp.

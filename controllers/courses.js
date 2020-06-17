@@ -4,7 +4,7 @@ const Courses = require('../models/Courses');
 // @desc - get all courses, get course spcific to a bootcamp
 // @access - public
 // @route - GET /api/v1/courses
-// @route - GET /api/v1/bootcamps/  :bootcampId/courses
+// @route - GET /api/v1/bootcamps/    :bootcampId/courses
 
 exports.getCourses = asyncHandler(async (req, res, next) => {
   let query;
@@ -14,7 +14,7 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
     query = Courses.find({ bootcamp: req.params.bootcampId });
   } else {
     // else, get all courses
-    query = Courses.find();
+    query = Courses.find().populate('bootcamp', 'name description');
   }
 
   // execute the query
