@@ -133,7 +133,7 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
 **routes/courses.js**
 
 ```javascript
-// set mergeParams to true
+// set mergeParams to true - used to merge params from other routes 
 const router = express.Router({ mergeParams: true });
 // create routes
 
