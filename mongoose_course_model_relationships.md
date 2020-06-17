@@ -149,8 +149,8 @@ module.exports = router;
 **routes/bootcamps.js**
 
 ```javascript
-// re-route to other routers
+// re-route/use courseRouter.
 router.use('/:bootcampId/courses', courseRouter);
 
-// here v basically re route to courseRouter. when there is above given params is given
+// here v basically re route to courseRouter. when there is above given api is given
 ```
