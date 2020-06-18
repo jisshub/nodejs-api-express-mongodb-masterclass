@@ -276,3 +276,74 @@ exports.deletBootcamp = asyncHandler(_aysnc (req, res, next) => {
 
 })
 ```
+
+## get single course
+
+**controllers/bootcamp.js**
+
+```javascript
+// @ desc - get single course
+// @route - GET /api/v1/courses/:id
+exports.getSingleCourse = asyncHandler(async (req, res, next) => {
+  const course = await Courses.findById(req.params.id).populate(
+    'bootcamp',
+    'name description'
+  );
+
+  if (!course) {
+    return next(
+      new ErrorResponse(`Course with id ${req.params.id} not found`, 400)
+    );
+  }
+
+  // end back the response to client
+  res.status(200).json({
+    success: true,
+    data: course,
+  });
+});
+```
+
+## create new course
+
+**controllers/bootcamp.js**
+
+```javascript
+// @ desc - add new course
+// @route - POST /api/v1/bootcamps/:bootcampId/courses
+// @access -Private
+
+exports.createCourse = asyncHandler(async (req, res, next) => {
+  // assign bootcamp id in params to bootcamp field in course
+  req.body.bootcamp = req.params.bootcampId;
+
+  // find the bootcamp by bootcampId
+  const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+
+  // check bootcamp exist/not
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(
+        `bootcamp not found with id ${req.params.bootcampId}`,
+        404
+      )
+    );
+  }
+  // if bootcamp exist -> create course -> pass body which also ncludes req.body.bootcamp field
+
+  const courses = await Courses.create(req.body);
+
+  // send back response to client
+  res.status(200).json({
+    data: courses,
+    success: true,
+  });
+});
+```
+
+**routes/bootcamps.js**
+
+```javascript
+// set routes
+router.route('/').get(getCourses).post(createCourse);
+```
