@@ -420,7 +420,52 @@ exports.deleteACourse = asyncHandler(async (req, res, next) => {
 **routes/courses.js**
 
 ```javascript
-router
-  .route('/:id')
-  .delete(deleteACourse);
+router.route('/:id').delete(deleteACourse);
+```
+
+## finding average cost of all courses in a bootcamp
+
+**models/Courses.js**
+
+```javascript
+// create a static method to get average cost of courses in a bootcamp
+CourseSchema.statics.getAverageCost = async function (bootcampId) {
+  console.log(`Calculating the average cost of tuitions`.blue);
+
+  // aggregations - call an aggregate method that returns a Promise, use await,
+  // aggregate method takes an array called pipeline
+
+  const obj = await this.aggregate(
+    [
+      {
+        // match the bootcamp field with bootcampId passed as parameter
+        $match: { bootcamp: bootcampId },
+      },
+      {
+        //
+        $group: {
+          _id: '$bootcamp',
+          averageCost: { $avg: '$tuition' }, // get averageCost using avg operator - tuition is the field where v want to find the average.
+        },
+      },
+    ]
+
+    // after the aggregation we get an object with id of bootcampId and averageCost of all tuition in that bootcamp.
+  );
+
+  // log the object here
+  console.log(obj);
+};
+
+// call getAverageCost after save
+CourseSchema.post('save', function () {
+  // run the static method here,
+  this.constructor.getAverageCost(this.bootcamp);
+});
+
+// call getAverageCost before remove, use pre()
+CourseSchema.pre('remove', function () {
+  // run the static method here,
+  this.constructor.getAverageCost(this.bootcamp);
+});
 ```

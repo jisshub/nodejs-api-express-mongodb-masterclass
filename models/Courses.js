@@ -43,7 +43,7 @@ const CourseSchema = mongoose.Schema({
   },
 });
 
-// static method to get average cost of courses in a bootcamp
+// create a static method to get average cost of courses in a bootcamp
 CourseSchema.statics.getAverageCost = async function (bootcampId) {
   console.log(`Calculating the average cost of tuitions`.blue);
 
@@ -74,7 +74,7 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
 
 // call getAverageCost after save
 CourseSchema.post('save', function () {
-  // run the static method,
+  // run the static method here,
   this.constructor.getAverageCost(this.bootcamp);
 });
 
