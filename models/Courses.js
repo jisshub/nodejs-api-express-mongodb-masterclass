@@ -65,7 +65,7 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
       },
     ]
 
-    // after the aggreagtion we get an object with id of bootcampId and averageCost of all tuition in a bootcamp.
+    // after the aggregation we get an object with id of bootcampId and averageCost of all tuition in that bootcamp.
   );
 
   // log the object here
@@ -73,10 +73,16 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
 };
 
 // call getAverageCost after save
-CourseSchema.post('save', function () {});
+CourseSchema.post('save', function () {
+  // run the static method,
+  this.constructor.getAverageCost(this.bootcamp);
+});
 
 // call getAverageCost before remove, use pre()
-CourseSchema.pre('remove', function () {});
+CourseSchema.pre('remove', function () {
+  // run the static method here,
+  this.constructor.getAverageCost(this.bootcamp);
+});
 
 // export the schema
 module.exports = mongoose.model('Course', CourseSchema);
