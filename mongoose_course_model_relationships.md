@@ -347,3 +347,80 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 // set routes
 router.route('/').get(getCourses).post(createCourse);
 ```
+
+---
+
+## update a course
+
+**controllers/courses.js**
+
+```javascript
+// @PUT - update a course
+// @route - PUT /api/v1/course/:id
+// @access - Private
+
+exports.updateACourse = asyncHandler(async (req, res, next) => {
+  // find course by id.
+  let course = await Courses.findById(req.params.id);
+  // if no course exist
+  if (!course) {
+    return next(
+      new ErrorResponse(`course with id ${req.params.id} no found`),
+      404
+    );
+  }
+  // if course exist, update the course
+  course = await Courses.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  // send back the response -> client
+  res.status(200).json({
+    success: true,
+    data: course,
+  });
+});
+```
+
+**routes/courses.js**
+
+```javascript
+router.route('/:id').put(updateACourse);
+```
+
+---
+
+## delete a course
+
+**controllers/courses.js**
+
+```javascript
+// @desc - delete a course
+// @route - DELETE /api/v1/courses/:id
+// @access- private
+
+exports.deleteACourse = asyncHandler(async (req, res, next) => {
+  // find the course
+  let course = await Courses.findById(req.params.id);
+  // if course found DELETE it,
+  if (course) {
+    course = await Courses.findByIdAndDelete(req.params.id);
+    // send back the resposne to client
+    res.status(200).json({
+      success: true,
+      msg: 'data deleted',
+    });
+  }
+  // if course not found,
+  return next(new ErrorResponse(`course not found with id ${req.params.id}`));
+});
+```
+
+**routes/courses.js**
+
+```javascript
+router
+  .route('/:id')
+  .delete(deleteACourse);
+```

@@ -81,5 +81,49 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
   });
 });
 
-// delete a course
-// exports.deleteACourse =
+// @PUT - update a course
+// @route - PUT /api/v1/course/:id
+// @access - Private
+
+exports.updateACourse = asyncHandler(async (req, res, next) => {
+  // find course
+  let course = await Courses.findById(req.params.id);
+  // if no course exist
+  if (!course) {
+    return next(
+      new ErrorResponse(`course with id ${req.params.id} no found`),
+      404
+    );
+  }
+  // if course exist, update the course
+  course = await Courses.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  // send bakc the response
+  res.status(200).json({
+    success: true,
+    data: course,
+  });
+});
+
+// @desc - delete a course
+// @route - PUT /api/v1/courses/:id
+// @access- private
+
+exports.deleteACourse = asyncHandler(async (req, res, next) => {
+  // find the course
+  let course = await Courses.findById(req.params.id);
+  // if course found DELETE it,
+  if (course) {
+    course = await Courses.findByIdAndDelete(req.params.id);
+    // send back the resposne to clienT
+    res.status(200).json({
+      success: true,
+      msg: 'data deleted',
+    });
+  }
+  // if course not found,
+  return next(new ErrorResponse(`course not found with id ${req.params.id}`));
+});
