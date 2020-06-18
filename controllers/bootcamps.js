@@ -18,19 +18,19 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 
   // convert js object to json string.
   let queryStr = JSON.stringify(reqQuery);
-  // // gives,  {"averageCost":{"lte":"8000"}}
+  // gives,  {"averageCost":{"lte":"8000"}}
 
-  // // // replace lte with $lte,
+  // replace lte with $lte,
   queryStr = queryStr.replace(
     /\b(gt|gte|lt|lte|in)\b/g,
     (match) => `$${match}`
   );
-  // // // v concatenate with $ with matched value,
+  // v concatenate with $ with matched value,
 
-  // // // console.log(queryStr); // {"averageCost":{"$lte":"8000"}}
+  // console.log(queryStr); // {"averageCost":{"$lte":"8000"}}
 
-  // // // pass queryStr to query - parse it to js object
-  query = Bootcamp.find(JSON.parse(queryStr));
+  // pass queryStr to query - parse it to js object - populate the courses in each bootcamp
+  query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
 
   // executing the query
   const bootcamps = await query;
@@ -100,8 +100,8 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // route - PUT /api/v1/bootcamps/:id
 
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-  // find the document and delete
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  // find the document here
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
   // if id is in coorect format but no data found
   if (!bootcamp) {
@@ -109,6 +109,9 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
     );
   }
+
+  // trigger the 'middleware -2' in Bootcamp model, and remove bootcamp
+  bootcamp.remove();
   // sent the response back
   res.status(200).json({ success: true, msg: 'data deleted' });
 });

@@ -93,7 +93,7 @@ const deleteData = async () => {
 
 ---
 
-- GET {{URL}}/api/v1/courses/  -> get all courses
+- GET {{URL}}/api/v1/courses/ -> get all courses
 
 - GET {{URL}}/api/v1/bootcamps/5d713995b721c3bb38c1f5d0/courses -> get courses of a bootcamp
 
@@ -133,7 +133,7 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
 **routes/courses.js**
 
 ```javascript
-// set mergeParams to true - used to merge params from other routes 
+// set mergeParams to true - used to merge params from other routes
 const router = express.Router({ mergeParams: true });
 // create routes
 
@@ -167,3 +167,112 @@ query = Courses.find().populate('bootcamp', 'name description');
 
 - _bootcamp_ - fiels in course,
 - _name, description_ - fields needed from bootcamp.
+
+## using reverse populate.
+
+- so the task is to **get the bootcamps along with array of courses** in each one.
+
+- v use **virtual** to accompolish this,
+
+- First,
+
+**toJSON** - conbert the document to json,
+_doc.toJSON({ virtuals: true })_
+
+**toObject** - Converts this document into a plain javascript object, ready for storage in MongoDB.
+
+_doc.toObject({ virtuals: true })_
+
+**models/Bootcamp.js**
+
+```javascript
+const BootcampSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'please add a name'],
+      maxlength: [50, 'not more thaan 50 characters'],
+      trim: true,
+      unique: true,
+    },
+    slug: String,
+    description: {
+      type: String,
+      required: [true, 'please add description'],
+      maxlength: [500, 'not more than 500 chars'],
+    },
+  },
+  // apply toJSON, toObject, set virtual property to true
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+// reverse populate
+BootcampSchema.virtual('courses', {
+  ref: 'Course',
+  localField: '_id',
+  foreignField: 'bootcamp',
+  justOne: false,
+});
+
+// ref - model we want to set reference to
+// localField - id of bootcamp model,
+// foreignfiedl - foreign field in course model that relates to _id in Course mode
+// justOne - means need just one array of courses
+```
+
+---
+
+**controllers/bootcamp.js**
+
+```javascript
+// pass queryStr to query - parse it to js object - populate the courses in each bootcamp
+query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
+```
+
+## using cascase delete.
+
+### cascade delete courses while bootcamp is deleted,
+
+**models/Bootcamp.js**
+
+```javascript
+// middleware - 2
+// cascase delete course when a bootcamp is deleted. use pre() means, runs before removing bootcamp from db.
+BootcampSchema.pre('remove', async function (next) {
+  // select Course model - match 'bootcamp' field of Course with '_id' field of Bootcamp.
+  // if both matches delete courses in that matched bootcamp.
+  await this.model('Course').deleteMany({ bootcamp: this._id });
+  // move to next middleware
+});
+```
+
+- we cant access the this.\_id of bootcamp since we use pre() ie before deleting the bootcamp
+
+- **Next to trigger this middleware we have use remove() in controllers**.
+
+---
+
+**controllers/bootcamps.js**
+
+```javascript
+exports.deletBootcamp = asyncHandler(_aysnc (req, res, next) => {
+  // find the document here
+  const bootcamp = await Bootcamp.findById(req.params.id);
+
+  // if id is in coorect format but no data found
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
+    );
+  }
+
+  // trigger the 'middleware -2' in Bootcamp model, then remove bootcamp
+  bootcamp.remove();
+  // sent the response back
+  res.status(200).json({ success: true, msg: 'data deleted' });
+
+})
+```
