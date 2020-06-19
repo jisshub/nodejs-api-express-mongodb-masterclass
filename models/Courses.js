@@ -68,6 +68,17 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
     // after the aggregation we get an object with id of bootcampId and averageCost of all tuition in that bootcamp.
   );
 
+  // save to db
+  try {
+    // use Bootcamp Model - find & update bootcamp using bootcampId - pass data to be added ie. averageCost
+    await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
+      // obj -> array of one object -> convert to integer
+      averageCost: Math.ceil(obj[0].averageCost),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+
   // log the object here
   console.log(obj);
 };
