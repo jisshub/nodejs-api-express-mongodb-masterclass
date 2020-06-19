@@ -15,6 +15,7 @@ const morgan = require('morgan');
 // require connectDB
 const connectDB = require('./config/db');
 const Courses = require('./models/Courses');
+const fileUpload = require('express-fileupload');
 
 // configure dotenv - laod env variables
 dotenv.config({ path: './config/config.env' });
@@ -37,11 +38,14 @@ if (process.env.NODE_ENV === 'development') {
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
 
-// use courses routers
+// use courses router
 app.use('/api/v1/courses', courses);
 
 // use errorHandler middleware
 app.use(errorHandler);
+
+// use express-fileupload module here
+app.use(fileUpload());
 
 // set port - will listen to PORT 5000 always
 const PORT = process.env.PORT || 5000;
@@ -59,5 +63,5 @@ process.on('unhandledRejection', (err, promise) => {
   server.close(() => process.exit(1));
 });
 
-// unhandlesTejection event occurs throwws erro with message.
+// unhandleRejection event occurs throwws erro with message.
 // close the server and exit the process.

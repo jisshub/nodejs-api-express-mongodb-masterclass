@@ -115,3 +115,23 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
   // sent the response back
   res.status(200).json({ success: true, msg: 'data deleted' });
 });
+
+// @desc - Upload a Photo for Bootcamp
+// @route - PUT /api/v1/bootcamp/:id/photo
+// @access - Private,
+
+exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
+  // find the document by Id,
+  const bootcamp = await Bootcamp.findById(req.params.id);
+  // if no bootcamp found,
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 400)
+    );
+  }
+  // if found - but file not uploaded
+  if (!req.files) {
+    return next(new ErrorResponse(`Photo not Uplaaded`, 400));
+  }
+  console.log(req.files.file);
+});

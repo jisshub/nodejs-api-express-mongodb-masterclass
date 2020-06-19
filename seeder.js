@@ -28,7 +28,7 @@ const importData = async () => {
   try {
     //  parse the json array to an array of object - resolve the data - save to db.
     await Bootcamp.create(JSON.parse(data));
-    // await Course.create(JSON.parse(courses));
+    await Course.create(JSON.parse(courses));
     // green.inverse - color of log message
     console.log('Data saved'.green.inverse);
     // exit the process

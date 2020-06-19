@@ -9,6 +9,7 @@ const {
   createBootcamp,
   updateBootcamp,
   deleteBootcamp,
+  bootcampPhotoUpload,
 } = require('../controllers/bootcamps');
 
 //
@@ -27,5 +28,7 @@ router
   .put(updateBootcamp)
   .delete(deleteBootcamp);
 
+// route for bootcamp photo uplaod
+router.route('/:id/photo').put(bootcampPhotoUpload);
 // export the router here
 module.exports = router;
