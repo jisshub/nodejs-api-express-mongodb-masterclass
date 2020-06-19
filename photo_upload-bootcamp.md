@@ -137,6 +137,10 @@ set **Content-Type** as _multipart/form-data_.
 
 - send the request.
 
+- can view the screenshots
+  ![image](./screenshots/postman_image_upload_1.png 'image')
+  ![image](./screenshots/postman_image_upload_2.png 'image')
+
 ---
 
 - we can view the image uploaded from browser,
