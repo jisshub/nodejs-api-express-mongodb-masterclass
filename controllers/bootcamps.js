@@ -148,7 +148,7 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
 
   // if mimetype is not image. check file type
   if (!file.mimetype.startsWith('image')) {
-    return next(new ErrorResponse(`Please uplaod an image`, 400));
+    return next(new ErrorResponse(`Please upload an image`, 400));
   }
 
   // check file size
