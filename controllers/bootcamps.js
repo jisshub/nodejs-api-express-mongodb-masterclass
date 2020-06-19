@@ -2,7 +2,7 @@
 const Bootcamp = require('../models/Bootcamp');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
-const { query } = require('express');
+const path = require("path");
 
 // create controller method for each routes
 // and export
@@ -14,7 +14,9 @@ const { query } = require('express');
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
   let query;
   //make a copy of req.query
-  const reqQuery = { ...req.query };
+  const reqQuery = {
+    ...req.query
+  };
 
   // convert js object to json string.
   let queryStr = JSON.stringify(reqQuery);
@@ -57,7 +59,10 @@ exports.getSingleBootcamp = asyncHandler(async (req, res, next) => {
     );
   } else {
     // send the response
-    res.status(200).json({ success: true, data: bootcamp });
+    res.status(200).json({
+      success: true,
+      data: bootcamp
+    });
   }
 });
 
@@ -92,7 +97,10 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
     );
   }
-  res.status(200).json({ success: true, data: bootcamp });
+  res.status(200).json({
+    success: true,
+    data: bootcamp
+  });
 });
 
 // @desc - delete a bootcamp
@@ -113,7 +121,10 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
   // trigger the 'middleware -2' in Bootcamp model, and remove bootcamp
   bootcamp.remove();
   // sent the response back
-  res.status(200).json({ success: true, msg: 'data deleted' });
+  res.status(200).json({
+    success: true,
+    msg: 'data deleted'
+  });
 });
 
 // @desc - Upload a Photo for Bootcamp
@@ -133,5 +144,37 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
   if (!req.files) {
     return next(new ErrorResponse(`Photo not Uplaaded`, 400));
   }
-  console.log(req.files.file);
+  const file = req.files.file;
+
+  // if mimetype is not image. check file type
+  if (!file.mimetype.startsWith('image')) {
+    return next(new ErrorResponse(`Please uplaod an image`, 400));
+  }
+
+  // check file size
+  if (file.size > process.env.MAX_FILE_UPLOAD) {
+    return next(new ErrorResponse(`photo size dont exceed 1MB`), 400)
+  }
+
+  // create custom file name - parse the file extension,
+  file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`
+  console.log(file.name); //photo_<bootcampId>.jpg
+
+  // move the file to public folder,
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      return next(new ErrorResponse(`photo upload failed`, 500))
+    }
+    // insert file.name to Model,
+    await Bootcamp.findByIdAndUpdate(req.params.id, {
+      photo: file.name
+    })
+    // send back the repsone -> client
+    res.status(200).json({
+      success: true,
+      data: file.name
+    })
+  })
+
+
 });
