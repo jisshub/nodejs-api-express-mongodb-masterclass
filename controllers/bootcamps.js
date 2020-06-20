@@ -2,7 +2,7 @@
 const Bootcamp = require('../models/Bootcamp');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
-const path = require("path");
+const path = require('path');
 
 // create controller method for each routes
 // and export
@@ -12,36 +12,8 @@ const path = require("path");
 // route - GET /api/v1/bootcamps
 
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-  let query;
-  //make a copy of req.query
-  const reqQuery = {
-    ...req.query
-  };
-
-  // convert js object to json string.
-  let queryStr = JSON.stringify(reqQuery);
-  // gives,  {"averageCost":{"lte":"8000"}}
-
-  // replace lte with $lte,
-  queryStr = queryStr.replace(
-    /\b(gt|gte|lt|lte|in)\b/g,
-    (match) => `$${match}`
-  );
-  // v concatenate with $ with matched value,
-
-  // console.log(queryStr); // {"averageCost":{"$lte":"8000"}}
-
-  // pass queryStr to query - parse it to js object - populate the courses in each bootcamp
-  query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
-
-  // executing the query
-  const bootcamps = await query;
-  // get query params from api
-  res.status(200).json({
-    success: true,
-    count: bootcamps.length,
-    data: bootcamps,
-  });
+  // get response from advancedResult middleware.
+  res.status(200).json(res.advancedResult);
 });
 
 // @desc - get a bootcamps
@@ -61,7 +33,7 @@ exports.getSingleBootcamp = asyncHandler(async (req, res, next) => {
     // send the response
     res.status(200).json({
       success: true,
-      data: bootcamp
+      data: bootcamp,
     });
   }
 });
@@ -99,7 +71,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({
     success: true,
-    data: bootcamp
+    data: bootcamp,
   });
 });
 
@@ -123,7 +95,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
   // sent the response back
   res.status(200).json({
     success: true,
-    msg: 'data deleted'
+    msg: 'data deleted',
   });
 });
 
@@ -153,28 +125,26 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
 
   // check file size
   if (file.size > process.env.MAX_FILE_UPLOAD) {
-    return next(new ErrorResponse(`photo size dont exceed 1MB`), 400)
+    return next(new ErrorResponse(`photo size dont exceed 1MB`), 400);
   }
 
   // create custom file name - parse the file extension,
-  file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`
+  file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`;
   console.log(file.name); //photo_<bootcampId>.jpg
 
   // move the file to public folder,
   file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
     if (err) {
-      return next(new ErrorResponse(`photo upload failed`, 500))
+      return next(new ErrorResponse(`photo upload failed`, 500));
     }
     // insert file.name to Model,
     await Bootcamp.findByIdAndUpdate(req.params.id, {
-      photo: file.name
-    })
+      photo: file.name,
+    });
     // send back the repsone -> client
     res.status(200).json({
       success: true,
-      data: file.name
-    })
-  })
-
-
+      data: file.name,
+    });
+  });
 });

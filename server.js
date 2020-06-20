@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
-const path = require("path");
+const path = require('path');
 
 // require the xpress router exported
 const bootcamps = require('./routes/bootcamps');
@@ -17,10 +17,11 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 const Courses = require('./models/Courses');
 const fileupload = require('express-fileupload');
+const advancedResult = require('./middleware/advancedResults');
 
 // configure dotenv - laod env variables
 dotenv.config({
-  path: './config/config.env'
+  path: './config/config.env',
 });
 
 // call connecDB
@@ -41,7 +42,7 @@ if (process.env.NODE_ENV === 'development') {
 // use express-fileupload module here
 app.use(fileupload());
 
-// set public as our static folder ,
+// set public as our static folder,
 app.use(express.static(path.join(path.dirname('./'), 'public')));
 
 // use express router
@@ -52,6 +53,9 @@ app.use('/api/v1/courses', courses);
 
 // use errorHandler middleware
 app.use(errorHandler);
+
+// use advancedResults midddleware
+app.use(advancedResult);
 
 // set port - will listen to PORT 5000 always
 const PORT = process.env.PORT || 5000;

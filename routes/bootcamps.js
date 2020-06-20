@@ -14,12 +14,16 @@ const {
 
 //
 const courseRouter = require('./courses');
+const advancedResult = require('../middleware/advancedResults');
+const Bootcamp = require('../models/Bootcamp');
 
 // re-route to other routers
 router.use('/:bootcampId/courses', courseRouter);
 
 // set routers for get and post with no params
-router.route('/').get(getBootcamps).post(createBootcamp);
+// use advancedResult middleware to getBootcamps.
+
+router.route('/').get(advancedResult(Bootcamp, "courses"), getBootcamps).post(createBootcamp);
 
 // set a seperate routers for put, delete, get with params id.
 router
