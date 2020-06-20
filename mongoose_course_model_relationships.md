@@ -217,7 +217,7 @@ BootcampSchema.virtual('courses', {
   justOne: false,
 });
 
-// courses - name for this virtual 
+// courses - field name for the new array of movies
 // ref - model we want to set reference to
 // localField - id of bootcamp model,
 // foreignfiedl - foreign field in course model that relates to _id in Course mode
@@ -231,6 +231,8 @@ BootcampSchema.virtual('courses', {
 ```javascript
 // pass queryStr to query - parse it to js object - populate the courses in each bootcamp
 query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
+
+// courses - field name for that array
 ```
 
 ## using cascase delete.
