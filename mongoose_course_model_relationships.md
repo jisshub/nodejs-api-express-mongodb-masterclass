@@ -217,6 +217,7 @@ BootcampSchema.virtual('courses', {
   justOne: false,
 });
 
+// courses - name for this virtual 
 // ref - model we want to set reference to
 // localField - id of bootcamp model,
 // foreignfiedl - foreign field in course model that relates to _id in Course mode
