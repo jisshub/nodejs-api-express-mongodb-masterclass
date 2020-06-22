@@ -98,3 +98,21 @@ _POST {{URL}}/api/v1/auth/register_
 ---
 
 ## User Register - Encrypt Password
+
+# hash the password using bcrypt before saving to db,
+
+**models/User.js**
+
+```javascript
+// middleware - hash password b4 saving to db - use bcrypt
+UserSchema.pre('save', async function (next) {
+  // generates salt using genSalt(10), 10 - no of rounds - higher rounds - more security.
+  const salt = await bcrypt.genSalt(10);
+
+  // get password field - use salt to hash it,
+  this.password = await bcrypt.hash(this.password, salt);
+
+  // move to next middlware
+  next();
+});
+```

@@ -1,5 +1,7 @@
 // require mongoose
 const mongoose = require("mongoose");
+// requre bcryptjs
+const bcrypt = require("bcryptjs");
 
 // define a UserSchmea
 const UserSchema = mongoose.Schema({
@@ -35,6 +37,18 @@ const UserSchema = mongoose.Schema({
         default: Date.now
     }
 })
+
+// middleware - hash password b4 saving to db - use bcrypt
+UserSchema.pre('save', async function (next) {
+    // generates salt using genSalt(10) - 10 - no of rounds - higher rounds - more security.
+    const salt = await bcrypt.genSalt(10);
+
+    // get password field - use salt to hash it,
+    this.password = await bcrypt.hash(this.password, salt);
+
+    // move to next middlare
+    next();
+});
 
 // edxport the schema - 
 module.exports = mongoose.model('User', UserSchema);

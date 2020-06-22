@@ -14,7 +14,7 @@ exports.register = asyncHandler(async (req, res, next) => {
         role
     } = req.body
 
-    // create user
+    // create user - pass fields as object
     const user = await User.create({
         name,
         email,
