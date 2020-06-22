@@ -1,3 +1,4 @@
+// define an advancedResult function
 const advancedResult = (model, populate) => async (req, res, next) => {
     let query;
     //make a copy of req.query
@@ -36,7 +37,7 @@ const advancedResult = (model, populate) => async (req, res, next) => {
         data: results,
     };
 
-    //   move to next middleare
+    // move to next middleare
     next();
 };
 

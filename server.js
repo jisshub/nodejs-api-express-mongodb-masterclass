@@ -7,6 +7,8 @@ const path = require('path');
 const bootcamps = require('./routes/bootcamps');
 
 const courses = require('./routes/courses');
+
+const auth = require('./routes/auth');
 // ewquire erroHandler middleware
 const errorHandler = require('./middleware/error');
 
@@ -18,6 +20,7 @@ const connectDB = require('./config/db');
 const Courses = require('./models/Courses');
 const fileupload = require('express-fileupload');
 const advancedResult = require('./middleware/advancedResults');
+
 
 // configure dotenv - laod env variables
 dotenv.config({
@@ -45,17 +48,17 @@ app.use(fileupload());
 // set public as our static folder,
 app.use(express.static(path.join(path.dirname('./'), 'public')));
 
+
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
-
 // use courses router
 app.use('/api/v1/courses', courses);
+// use auth router
+app.use("/api/v1/auth", auth);
+
 
 // use errorHandler middleware
 app.use(errorHandler);
-
-// use advancedResults midddleware
-app.use(advancedResult);
 
 // set port - will listen to PORT 5000 always
 const PORT = process.env.PORT || 5000;

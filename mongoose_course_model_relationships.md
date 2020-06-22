@@ -442,7 +442,7 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
         $match: { bootcamp: bootcampId },
       },
       {
-        //
+        // group takes 2 data - bootcampId, averageCost
         $group: {
           _id: '$bootcamp',
           averageCost: { $avg: '$tuition' }, // get averageCost using avg operator - tuition is the field where v want to find the average.
@@ -450,7 +450,7 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
       },
     ]
 
-    // after the aggregation we get an object with id of bootcampId and averageCost of all tuition in that bootcamp.
+    // after the aggregation we get an array of single object with id of bootcampId and averageCost of all tuition in that bootcamp.
   );
 
   // save to db
