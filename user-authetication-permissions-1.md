@@ -379,3 +379,5 @@ exports.login = asyncHandler(async (req, res, next) => {
   sendTokenCookie(user, 200, res);
 });
 ```
+
+# sending token to routes - enabling authorized users to work on those routes
