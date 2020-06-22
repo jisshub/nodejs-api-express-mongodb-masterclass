@@ -23,6 +23,11 @@ const UserSchema = mongoose.Schema({
         required: [true, 'please add password'],
         select: false
     },
+    role: {
+        type: String,
+        enum: ['user', 'publisher'],
+        default: 'user'
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     createdAt: {
@@ -32,4 +37,4 @@ const UserSchema = mongoose.Schema({
 })
 
 // edxport the schema - 
-module.exports = mongoose.Model('User', UserSchema)
+module.exports = mongoose.model('User', UserSchema);
