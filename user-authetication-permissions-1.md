@@ -2,6 +2,14 @@
 
 ## initial set up
 
+- package installtions
+
+```bash
+npm i jsonwebtoken
+npm i bcryptjs
+
+```
+
 - create a model called, User.js
 
 **models/User.js**
@@ -99,7 +107,7 @@ _POST {{URL}}/api/v1/auth/register_
 
 ## User Register - Encrypt Password
 
-# hash the password using bcrypt before saving to db,
+### hash the password using bcrypt before saving to db
 
 **models/User.js**
 
@@ -114,5 +122,77 @@ UserSchema.pre('save', async function (next) {
 
   // move to next middlware
   next();
+});
+```
+
+## JSON WEBTOKEN
+
+![image](./screenshots/JSONWEBTOKEN_DETAIL.png 'image')
+
+- three parts -
+
+1. HEADER
+2. PAYLOAD
+3. SIGNATUER
+
+more on : <https://jwt.io/>
+
+---
+
+**config/config.env**
+
+```bash
+JWT_SECRET = uwteusdjghsdjfzjdghs
+JWT_EXPIRE = 30d
+
+# token expires in 30 days
+```
+
+**models/User.js**
+
+```javascript
+// sign json web token & return
+// create a method - methods calls on Document, statics calls on Model
+
+UserSchema.methods.getSignedJwtToken = function () {
+  return jwt.sign(
+    {
+      // pertains to currect document / here user, since v use methods here
+      id: this._id,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES }
+  );
+};
+```
+
+---
+
+- syntax:
+
+```javascript
+jwt.sign(
+  {
+    data: 'foobar',
+  },
+  'secret',
+  { expiresIn: '1h' }
+);
+```
+
+more on : <https://www.npmjs.com/package/jsonwebtoken>
+
+**controllers/auth.js**
+
+- finally call this method in controllers on user
+
+```javascript
+// create token for current user - invoke getSignedJwtToken method on current user.
+const token = user.getSignedJwtToken();
+
+// send back the repsonse -> client
+res.status(200).json({
+  success: true,
+  token: token,
 });
 ```

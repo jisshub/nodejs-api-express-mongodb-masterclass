@@ -22,8 +22,13 @@ exports.register = asyncHandler(async (req, res, next) => {
         role
     })
 
+    // create token for current user - invoke getSignedJwtToken method on current user.
+    const token = user.getSignedJwtToken();
+
+    // send back the repsonse -> client
     res.status(200).json({
         success: true,
-        data: user
+        token: token
     });
+
 });

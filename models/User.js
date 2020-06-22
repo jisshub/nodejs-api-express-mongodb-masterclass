@@ -1,42 +1,44 @@
 // require mongoose
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 // requre bcryptjs
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
+// require jwt
+const jwt = require('jsonwebtoken');
 
 // define a UserSchmea
 const UserSchema = mongoose.Schema({
     name: {
         type: String,
         trim: true,
-        required: [true, "please add a name"]
+        required: [true, 'please add a name'],
     },
     email: {
         type: String,
-        required: [true, "please add an email"],
+        required: [true, 'please add an email'],
         match: [
             /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             'please enter valid email',
         ],
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
         minlength: 6,
         required: [true, 'please add password'],
-        select: false
+        select: false,
     },
     role: {
         type: String,
         enum: ['user', 'publisher'],
-        default: 'user'
+        default: 'user',
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     createdAt: {
         type: Date,
-        default: Date.now
-    }
-})
+        default: Date.now,
+    },
+});
 
 // middleware - hash password b4 saving to db - use bcrypt
 UserSchema.pre('save', async function (next) {
@@ -50,5 +52,21 @@ UserSchema.pre('save', async function (next) {
     next();
 });
 
-// edxport the schema - 
+// sign json web token & return
+// methods - define on Document, statics - define on Model
+// finally call this method on auth.js controller
+
+UserSchema.methods.getSignedJwtToken = function () {
+    return jwt.sign({
+            // pertains to currect document / here user, since v use methods here
+            id: this._id,
+        },
+        process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRE
+        }
+    );
+};
+
+
+// edxport the schema -
 module.exports = mongoose.model('User', UserSchema);
