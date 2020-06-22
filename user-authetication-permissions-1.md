@@ -229,8 +229,8 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('invalid credential given', 401));
   }
 
-  // check if password matches with hashed one  - pass password as argument
-  const isMatch = user.matchPasswords(password);
+  // check if password matches with hashed one  - pass password as argument, use await, since v use await before bcrypt.compare()
+  const isMatch = await user.matchPasswords(password);
 
   // if password not match
   if (!isMatch) {
