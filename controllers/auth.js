@@ -50,13 +50,13 @@ exports.login = asyncHandler(async (req, res, next) => {
     }
 
     // if inputs given, check user exist in db/not by matching email with email in db, select password to validate
-    const user = user.findOne({
+    const user = await User.findOne({
         email
     }).select('+password');
 
     // if no user exist,
     if (!user) {
-        return next(new ErrorResponse("invalid credential given", 401));
+        return next(new ErrorResponse("invalid credentials", 401));
     };
 
     // check if password matches - pass password as argument - use await, since v use await before bcrypt.compare()
@@ -68,7 +68,6 @@ exports.login = asyncHandler(async (req, res, next) => {
     };
 
     // if matches, create token and send success repsonse to client
-
     const token = user.getSignedJwtToken();
 
     res.status(200).json({

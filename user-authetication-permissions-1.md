@@ -218,11 +218,9 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   // if inputs given, check user exist in db/not by matching email with email in db, select password to validate
-  const user = user
-    .findOne({
-      email,
-    })
-    .select('+password');
+  const user = await User.findOne({
+    email,
+  }).select('+password');
 
   // if no user exist,
   if (!user) {
@@ -259,4 +257,12 @@ UserSchema.methods.matchPasswords = async function (userEnteredPassword) {
   return await bcrypt.compare(userEnteredPassword, this.password);
   // this.password- hashed one
 };
+```
+
+### set routes here,
+
+**routes/auth.js**
+
+```javascript
+router.route('/login').post(login);
 ```
