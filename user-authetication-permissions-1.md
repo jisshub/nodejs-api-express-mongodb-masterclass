@@ -132,7 +132,7 @@ UserSchema.pre('save', async function (next) {
 - three parts -
 
 1. HEADER
-2. PAYLOAD
+2. PAYLOAD - includes Data like id, expiresin
 3. SIGNATUER
 
 more on : <https://jwt.io/>
@@ -195,4 +195,68 @@ res.status(200).json({
   success: true,
   token: token,
 });
+```
+
+## User Login
+
+- Created _Token_ includes _userid_ with in the _payload_
+
+**controllers/auth.js**
+
+```javascript
+// @desc - user login
+// @route - POST /api/v1/auth/login
+// access - Public
+
+exports.login = asyncHandler(async (req, res, next) => {
+  // get email, passpwrd from input
+  const { email, password } = req.body;
+
+  // validate email, password
+  if (!email || !password) {
+    return next(new ErrorResponse('no email and password', 400));
+  }
+
+  // if inputs given, check user exist in db/not by matching email with email in db, select password to validate
+  const user = user
+    .findOne({
+      email,
+    })
+    .select('+password');
+
+  // if no user exist,
+  if (!user) {
+    return next(new ErrorResponse('invalid credential given', 401));
+  }
+
+  // check if password matches with hashed one  - pass password as argument
+  const isMatch = user.matchPasswords(password);
+
+  // if password not match
+  if (!isMatch) {
+    return next(new ErrorResponse('invalid cedentials', 401));
+  }
+
+  // if matches, create token and send success repsonse to client
+
+  const token = user.getSignedJwtToken();
+
+  res.status(200).json({
+    success: true,
+    token: token,
+  });
+});
+```
+
+## compare user entered password with hashed one
+
+**models/User.js**
+
+```javascript
+// match user entered password with hashed password
+UserSchema.methods.matchPasswords = async function (userEnteredPassword) {
+  // compare passwords - return true/false, use compare()
+  return await bcrypt.compare(userEnteredPassword, this.password);
+  // this.password- hashed one
+};
 ```
