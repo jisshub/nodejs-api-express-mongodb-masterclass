@@ -14,12 +14,14 @@ const errorHandler = require('./middleware/error');
 
 // require morgan middleware
 const morgan = require('morgan');
+const advancedResult = require('./middleware/advancedResults');
 
 // require connectDB
 const connectDB = require('./config/db');
 const Courses = require('./models/Courses');
 const fileupload = require('express-fileupload');
-const advancedResult = require('./middleware/advancedResults');
+const cookieParser = require("cookie-parser")
+
 
 
 // configure dotenv - laod env variables
@@ -44,6 +46,10 @@ if (process.env.NODE_ENV === 'development') {
 
 // use express-fileupload module here
 app.use(fileupload());
+// use cookieparser
+app.use(cookieParser())
+
+
 
 // set public as our static folder,
 app.use(express.static(path.join(path.dirname('./'), 'public')));

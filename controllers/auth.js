@@ -23,14 +23,8 @@ exports.register = asyncHandler(async (req, res, next) => {
         role
     })
 
-    // create token for current user - invoke getSignedJwtToken method on current user.
-    const token = user.getSignedJwtToken();
-
-    // send back the repsonse -> client
-    res.status(200).json({
-        success: true,
-        token: token
-    });
+    // invoke sendTokenResponse()- pass args
+    sendTokenResponse(user, 200, res)
 });
 
 // @desc - user login
@@ -67,13 +61,36 @@ exports.login = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('invalid cedentials', 401))
     };
 
+    // invoke sendTokenResponse()- pass args
+    sendTokenResponse(user, 200, res);
+});
+
+// get token, create cookie and send token with in cookie as respone
+const sendTokenResponse = (user, statusCode, res) => {
     // if matches, create token and send success repsonse to client
     const token = user.getSignedJwtToken();
 
-    res.status(200).json({
-        success: true,
-        token: token
-    })
+    // set options for the cookie
+    const options = {
+        // cookie expires in current date + 30 days.
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
 
+        // cookie accessible oly thru client side script, set httpOnly to true
+        httpOnly: true
+    };
 
-});
+    // if production mode, set secure flag to true,
+    if (process.env.NODE_ENV === 'production') {
+        options.secure = true;
+        // if true, cookie will sent with https protocol,
+    }
+
+    // send back the response with cookie having token in it.
+    res
+        .status(statusCode)
+        .cookie('cookie-1', token, options)
+        .json({
+            success: true,
+            token: token
+        });
+}
