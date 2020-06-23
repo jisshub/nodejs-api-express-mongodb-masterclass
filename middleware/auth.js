@@ -34,4 +34,17 @@ exports.protect = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('not authorzed tp access the route', 401));
   }
 });
-1;
+
+// grant access to the spcific roles
+exports.authorize = (...roles) => {
+
+  return (req, res, next) => {
+    // check if current user role is included in roles array recieved,
+
+    if (!roles.includes(req.user.role)) {
+      return next(new ErrorResponse(`not authorized to access the route by role ${req.user.role}`, 403));
+      // 403 - client not have access to the requested resource
+    }
+    next();
+  }
+}

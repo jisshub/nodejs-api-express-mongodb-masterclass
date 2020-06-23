@@ -7,7 +7,8 @@ const router = express.Router({
 // create routes
 
 const {
-  protect
+  protect,
+  authorize
 } = require("../middleware/auth")
 
 const {
@@ -19,14 +20,14 @@ const {
 } = require('../controllers/courses');
 
 // set routes
-router.route('/').get(getCourses).post(protect, createCourse);
+router.route('/').get(getCourses).post(protect, authorize('pulisher', 'admin'), createCourse);
 
 //
 router
   .route('/:id')
   .get(getSingleCourse)
-  .put(protect, updateACourse)
-  .delete(protect, deleteACourse);
+  .put(protect, authorize('publisher', 'admin'), updateACourse)
+  .delete(protect, authorize('publisher', 'admin'), deleteACourse);
 
 // export the router
 module.exports = router;

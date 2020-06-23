@@ -522,3 +522,52 @@ We can set the Authorization as below,
 - So for each protected routes we have tp set _Authorization_ like above. Thus saves the time because we dont have to generate a token each time v use this routes.
 
 ---
+
+# Authorizing the Roles
+
+**controllers/auth.js**
+
+```javascript
+// grant access to the spcific roles
+exports.authorize = (...roles) => {
+  return (req, res, next) => {
+    // check if current user role is included in roles array recieved,
+
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorResponse(
+          `not authorized to access the route by ${req.user.role}`,
+          403
+        )
+      );
+      // 403 - client not have access to the requested resource
+    }
+    next();
+  };
+};
+```
+
+- Next speicfy call this middleare in the routes to make it accessible for given roles only
+
+**routes/bootcamp.js**
+
+```javascript
+router
+  .route('/:id')
+  .get(getSingleBootcamp)
+  .put(protect, authorize('publisher', 'admin'), updateBootcamp)
+  .delete(protect, authorize('publisher', 'admin'), deleteBootcamp);
+
+// route for bootcamp photo uplaod
+router
+  .route('/:id/photo')
+  .put(protect, authorize('publisher', 'admin'), bootcampPhotoUpload);
+
+// so here only publisher and admin have the persmission to access these routes. ie they have the authority to create and manage bootcamps.
+```
+
+- note, use authorize() after protect middleware since v require req.user for authorize() which gets from protect middleware.
+
+* same in case for cousre routes too.
+
+-
