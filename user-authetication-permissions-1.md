@@ -507,7 +507,7 @@ We have to Auhotrization for each routes
 
 - Screenshots:
 
-![image](./screenshots/Authorization.png 'image')
+![image](./screenshots/Autorization.png 'image')
 
 - Select Type as Bearer Token and Token Variable
 
