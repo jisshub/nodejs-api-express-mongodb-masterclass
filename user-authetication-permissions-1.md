@@ -568,6 +568,4 @@ router
 
 - note, use authorize() after protect middleware since v require req.user for authorize() which gets from protect middleware.
 
-* same in case for cousre routes too.
-
--
+* same in case for _course routes_ too.
