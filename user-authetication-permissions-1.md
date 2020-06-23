@@ -432,6 +432,19 @@ put(protect, updateBootcamp);
 // use that protect middleware protect before controllers.
 ```
 
+**routes/courses.js**
+
+```javascript
+// require protect middleware
+const { protect } = require('../middleware/auth');
+
+// use it
+post(protect, createCourses);
+put(protect, updateCourse);
+
+// use that protect middleware protect before controllers.
+```
+
 - now if want to post, put , delete a data a token to be sent to that route for the authorization purpose. ie the user should be logged in.
 
 - else throws error,
@@ -440,4 +453,40 @@ put(protect, updateBootcamp);
 
 ![image](./screenshots/postman_authorization.png 'image');
 
----`
+---
+
+## Accessng the current logged in user
+
+- have to create new controller for that in auth,js
+
+**controller/auth.js**
+
+```javascript
+// @desc - get the current logged in user
+// @route - GET /api/v1/auth/me
+// access - Private
+
+exports.getMe = asyncHandler(async (req, res, next) => {
+  // get the user
+  const user = await User.findById(req.user.id);
+  // send back the response
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+```
+
+- now create a route for this.
+
+```javascript
+router.route('/me').get(protect, getMe);
+```
+
+- In Postman,
+
+![image](./screenshots/getcurrent_logged_user.png 'image');
+
+---
+
+# Automatically Storing the Token in postman
