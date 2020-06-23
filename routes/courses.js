@@ -1,8 +1,14 @@
 const express = require('express');
 
 // set mergeParams to true
-const router = express.Router({ mergeParams: true });
+const router = express.Router({
+  mergeParams: true
+});
 // create routes
+
+const {
+  protect
+} = require("../middleware/auth")
 
 const {
   getCourses,
@@ -13,14 +19,14 @@ const {
 } = require('../controllers/courses');
 
 // set routes
-router.route('/').get(getCourses).post(createCourse);
+router.route('/').get(getCourses).post(protect, createCourse);
 
 //
 router
   .route('/:id')
-  .get(getSingleCourse)
-  .put(updateACourse)
-  .delete(deleteACourse);
+  .get(protect, getSingleCourse)
+  .put(protect, updateACourse)
+  .delete(protect, deleteACourse);
 
 // export the router
 module.exports = router;

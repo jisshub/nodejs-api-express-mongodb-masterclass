@@ -65,26 +65,9 @@ module.exports = mongoose.Model('User', UserSchema);
 // @routes - POST /api/v1/auth/registet
 // @access - Public
 exports.register = asyncHandler(async (req, res, next) => {
-const {
-        name,
-        email,
-        password,
-        role
-    } = req.body;
-
-    // create user
-    const user = await User.create({
-        name,
-        email,
-        password,
-        role
-    });
-
-    // send back the response
-    res.status(200).json({
-        success: true,
-        data: user
-    })
+  res.status(200).json({
+    success: true,
+  });
 });
 ```
 
@@ -398,3 +381,63 @@ exports.login = asyncHandler(async (req, res, next) => {
 ```
 
 # sending token to routes - enabling authorized users to work on those routes
+
+- protect the routes using token
+
+**middleware/auth.js**
+
+```javascript
+// protect the routes with token
+exports.protect = asyncHandler(async (req, res, next) => {
+  // check authorization header is given and its value starts with 'Bearer' - access headers with 'req.headers'
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    // split req.headers.authorization into an array and get the token from it.
+    const token = req.headers.authorization.split(' ')[1];
+  }
+  // if token not exists
+  if (!token) {
+    return next(new ErrorResponse('not authorized to access the route', 401));
+  }
+
+  // verify the token
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+
+    // decoded has an id - use it to find the current user.
+    req.user = await User.findById(decoded.id);
+
+    next();
+  } catch (err) {
+    return next(new ErrorResponse('not authorzed tp access the route', 401));
+  }
+});
+```
+
+- next to sue this middleware before routes that are private access.
+
+**routes/bootcamp.js**
+
+```javascript
+// require protect middleware
+const { protect } = require('../middleware/auth');
+
+// use it
+post(protect, createBootcamp);
+put(protect, updateBootcamp);
+
+// use that protect middleware protect before controllers.
+```
+
+- now if want to post, put , delete a data a token to be sent to that route for the authorization purpose. ie the user should be logged in.
+
+- else throws error,
+
+- postman set up:
+
+![image](./screenshots/postma_authorization/png 'image');
+
+---

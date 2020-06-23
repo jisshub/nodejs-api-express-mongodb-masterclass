@@ -11,6 +11,10 @@ const {
   deleteBootcamp,
   bootcampPhotoUpload,
 } = require('../controllers/bootcamps');
+// 
+const {
+  protect
+} = require("../middleware/auth")
 
 //
 const courseRouter = require('./courses');
@@ -23,14 +27,14 @@ router.use('/:bootcampId/courses', courseRouter);
 // set routers for get and post with no params
 // use advancedResult middleware to getBootcamps.
 // pass Model, Populate as arguments
-router.route('/').get(advancedResult(Bootcamp, "courses"), getBootcamps).post(createBootcamp);
+router.route('/').get(advancedResult(Bootcamp, "courses"), getBootcamps).post(protect, createBootcamp);
 
 // set a seperate routers for put, delete, get with params id.
 router
   .route('/:id')
   .get(getSingleBootcamp)
-  .put(updateBootcamp)
-  .delete(deleteBootcamp);
+  .put(protect, updateBootcamp)
+  .delete(protect, deleteBootcamp);
 
 // route for bootcamp photo uplaod
 router.route('/:id/photo').put(bootcampPhotoUpload);
