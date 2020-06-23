@@ -24,7 +24,7 @@ router.route('/').get(getCourses).post(protect, createCourse);
 //
 router
   .route('/:id')
-  .get(protect, getSingleCourse)
+  .get(getSingleCourse)
   .put(protect, updateACourse)
   .delete(protect, deleteACourse);
 

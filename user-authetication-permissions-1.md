@@ -489,4 +489,36 @@ router.route('/me').get(protect, getMe);
 
 ---
 
-# Automatically Storing the Token in postman
+## Automatically Storing the Token in postman
+
+- Screenshot:
+
+![image](./screenshots/setting_tests.png 'image');
+
+- As in the image here we get the token while login and put that token in "TOKEN" variable.
+  later save the Tests.
+
+- Same as in register route as well.
+
+---
+
+Next to use this Token in diiferent routes -
+We have to Auhotrization for each routes
+
+- Screenshots:
+
+![image](./screenshots/Authorization.png 'image')
+
+- Select Type as Bearer Token and Token Variable
+
+---
+
+**For Example for delete a bootcamp** ,
+
+We can set the Authorization as below,
+
+![image](./screenshots/Authorization_2.png 'image')
+
+- So for each protected routes we have tp set _Authorization_ like above. Thus saves the time because we dont have to generate a token each time v use this routes.
+
+---
