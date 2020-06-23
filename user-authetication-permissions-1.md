@@ -569,3 +569,21 @@ router
 - note, use authorize() after protect middleware since v require req.user for authorize() which gets from protect middleware.
 
 * same in case for _course routes_ too.
+
+**routes/courses.js**
+
+```javascript
+router
+  .route('/')
+  .get(getCourses)
+  .post(protect, authorize('pulisher', 'admin'), createCourse);
+
+//
+router
+  .route('/:id')
+  .get(getSingleCourse)
+  .put(protect, authorize('publisher', 'admin'), updateACourse)
+  .delete(protect, authorize('publisher', 'admin'), deleteACourse);
+```
+
+---
