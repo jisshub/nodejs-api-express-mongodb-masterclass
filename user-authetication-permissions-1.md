@@ -438,6 +438,6 @@ put(protect, updateBootcamp);
 
 - postman set up:
 
-![image](./screenshots/postma_authorization/png 'image');
+![image](./screenshots/postman_authorization.png 'image');
 
----
+---`
