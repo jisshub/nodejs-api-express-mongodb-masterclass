@@ -389,13 +389,15 @@ exports.login = asyncHandler(async (req, res, next) => {
 ```javascript
 // protect the routes with token
 exports.protect = asyncHandler(async (req, res, next) => {
+  //initialze token
+  let token;
   // check authorization header is given and its value starts with 'Bearer' - access headers with 'req.headers'
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
     // split req.headers.authorization into an array and get the token from it.
-    const token = req.headers.authorization.split(' ')[1];
+    token = req.headers.authorization.split(' ')[1];
   }
   // if token not exists
   if (!token) {
@@ -404,19 +406,18 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   // verify the token
   try {
-    // verify and decode the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log(decoded);
+    // decoded = { id: '5ef0594deb5f495dbceacfca', iat: 1592903813, exp: 1595495813 }
 
-    // decoded has an id property - use id to find the current user.
+    // decoded has an id - use it to find the current user.
     req.user = await User.findById(decoded.id);
 
     next();
   } catch (err) {
     return next(new ErrorResponse('not authorzed tp access the route', 401));
   }
-});
-```
+});```
 
 - next , use this middleware before routes that require private access.
 
