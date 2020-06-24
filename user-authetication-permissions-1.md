@@ -417,7 +417,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 });
 ```
 
-- next to sue this middleware before routes that are private access.
+- next , use this middleware before routes that require private access.
 
 **routes/bootcamp.js**
 
