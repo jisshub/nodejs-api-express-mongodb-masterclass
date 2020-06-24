@@ -77,7 +77,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
   // set id, body, run mongoose validators on updated data
   const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true,
+    runValidators: true
   });
   // if no bootcamp exist
   if (!bootcamp) {
