@@ -13,7 +13,9 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
   // check whether there is bootcampId as req.params/not.
   if (req.params.bootcampId) {
     // if yes get courses that matches bootcampId
-    query = Courses.find({ bootcamp: req.params.bootcampId });
+    query = Courses.find({
+      bootcamp: req.params.bootcampId
+    });
   } else {
     // else, get all courses with bootcamp name & decsription, use populate()
     query = Courses.find().populate('bootcamp', 'name description');
@@ -57,6 +59,8 @@ exports.getSingleCourse = asyncHandler(async (req, res, next) => {
 exports.createCourse = asyncHandler(async (req, res, next) => {
   // assign bootcamp id in params to bootcamp field in course
   req.body.bootcamp = req.params.bootcampId;
+  // add current user to the req.body.user
+  req.body.user = req.user.id
 
   // find the bootcamp by bootcampId
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
@@ -70,6 +74,12 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`user ${req.user.id} is not authorized to add a course to the bootcamp ${bootcamp._id}`), 401);
+  }
+
   // if bootcamp exist -> create course -> pass body which also ncludes req.body.bootcamp field
 
   const courses = await Courses.create(req.body);

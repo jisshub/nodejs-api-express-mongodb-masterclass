@@ -96,7 +96,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
     );
   }
-  // if current user is not bootcamp owner and his role is not admin,
+  // if current user is not bootcamp owner and his role is not admin, her bootcamp.user is an objec, convert to String.
   if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
@@ -113,6 +113,116 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: bootcamp,
+  });
+});
+
+// @desc - delete a bootcamp
+// @access- private - authentication required
+// route - PUT /api/v1/bootcamps/:id
+
+exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
+  // find the document here
+  const bootcamp = await Bootcamp.findById(req.params.id);
+
+  // if id is in coorect format but no data found
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
+    );
+  }
+
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`user with role ${req.user.role} si not athorized to delete this bootcamp`))
+  }
+
+  // trigger the 'middleware -2' in Bootcamp model, and remove bootcamp
+  bootcamp.remove();
+  // sent the response back
+  res.status(200).json({
+    success: true,
+    msg: 'data deleted',
+  });
+});
+
+// @desc - Upload a Photo for Bootcamp
+// @route - PUT /api/v1/bootcamp/:id/photo
+// @access - Private,
+
+exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
+  // find the document by Id,
+  const bootcamp = await Bootcamp.findById(req.params.id);
+  // if no bootcamp found,
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 400)
+    );
+  }
+
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`user with role ${req.user.role} not authorized to upload a photo`), 401);
+  };
+
+```
+
+## OwnerShip for Courses
+
+- here only the bootcamp owner and also who is an admin can create the course- not others
+
+* first set a reladtionship b/w User and Course
+
+**models/Courses.js**
+
+```javascript
+// add a  user field
+user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true
+  }
+```
+
+**contollers/courses.js**
+
+```javascript
+exports.createCourse = asyncHandler(async (req, res, next) => {
+  // assign bootcamp id in params to bootcamp field in course
+  req.body.bootcamp = req.params.bootcampId;
+  // add current user to the req.body.user
+  req.body.user = req.user.id;
+
+  // find the bootcamp by bootcampId
+  const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+
+  // check bootcamp exist/not
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(
+        `bootcamp not found with id ${req.params.bootcampId}`,
+        404
+      )
+    );
+  }
+
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `user ${req.user.id} is not authorized to add a course to the bootcamp ${bootcamp._id}`
+      ),
+      401
+    );
+  }
+
+  // if bootcamp exist -> create course -> pass body which also ncludes req.body.bootcamp field
+
+  const courses = await Courses.create(req.body);
+
+  // send back response to client
+  res.status(200).json({
+    data: courses,
+    success: true,
   });
 });
 ```

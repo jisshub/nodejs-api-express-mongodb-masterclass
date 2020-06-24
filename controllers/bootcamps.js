@@ -83,7 +83,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Bootcamp with id ${req.params.id} not found`, 401)
     );
   }
-  // if current user is not bootcamp owner and his role is not admin,
+  // if current user is not bootcamp owner and his role is not admin, her bootcamp.user is an objec, convert to String
   if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(new ErrorResponse(`user with role ${req.user.role} not authorized to update the bootcamp`));
   };
@@ -115,7 +115,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
   }
 
   // if current user is not bootcamp owner and his role is not admin,
-  if (bootcamp.user !== req.user.id && req.user.role !== 'admin') {
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(new ErrorResponse(`user with role ${req.user.role} si not athorized to delete this bootcamp`))
   }
 
@@ -143,14 +143,15 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
   }
 
   // if current user is not bootcamp owner and his role is not admin,
-  if (bootcamp.user !== req.user.id && req.user.role !== 'admin') {
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(new ErrorResponse(`user with role ${req.user.role} not authorized to upload a photo`), 401);
   };
 
   // if found - but file not uploaded
   if (!req.files) {
     return next(new ErrorResponse(`Photo not Uplaaded`, 400));
-  }
+  };
+
   const file = req.files.file;
 
   // if mimetype is not image. check file type
