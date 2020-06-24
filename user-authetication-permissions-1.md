@@ -404,10 +404,11 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   // verify the token
   try {
+    // verify and decode the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log(decoded);
 
-    // decoded has an id - use it to find the current user.
+    // decoded has an id property - use id to find the current user.
     req.user = await User.findById(decoded.id);
 
     next();
