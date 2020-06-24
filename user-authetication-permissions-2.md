@@ -77,6 +77,42 @@ In postman,
 
 ## Setting Ownership for the bootcamp
 
-- suppose a user created a bootcamp- only he should have tht permisson to update that bootcamp - notother user can manage that bootcamp.
+- suppose a user created a bootcamp- only he should have tht permisson to update that bootcamp - not other user can manage that bootcamp.
 - so v set ownership for that bootcamp.
-- thus it can be managed by the user who owns it.
+- thus it can be managed by the user who owns it. not others.
+
+### Updating the bootcamp by its owner
+
+**controllers/bootcamp.js**
+
+```javascript
+exports.updateBootcamp = asyncHandler(async (req, res, next) => {
+  // find the bootcamp by Id
+  let bootcamp = await Bootcamp.findById(req.params.id);
+  // if no bootcamp exist
+  if (!bootcamp) {
+    // return  next middleware if not found
+    return next(
+      new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
+    );
+  }
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `user with role ${req.user.role} not authorized to update the bootcamp`
+      )
+    );
+  }
+  // if current user is the owner and is also an admin
+  // set id, body, run mongoose validators on updated data
+  bootcamp = await Bootcamp.findOneAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({
+    success: true,
+    data: bootcamp,
+  });
+});
+```

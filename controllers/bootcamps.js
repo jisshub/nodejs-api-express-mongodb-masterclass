@@ -74,18 +74,25 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
 // route - PUT /api/v1/bootcamps/:id
 
 exports.updateBootcamp = asyncHandler(async (req, res, next) => {
-  // set id, body, run mongoose validators on updated data
-  const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+  // find the bootcamp by Id
+  let bootcamp = await Bootcamp.findById(req.params.id);
   // if no bootcamp exist
   if (!bootcamp) {
     // return  next middleware if not found
     return next(
-      new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
+      new ErrorResponse(`Bootcamp with id ${req.params.id} not found`, 401)
     );
   }
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`user with role ${req.user.role} not authorized to update the bootcamp`));
+  };
+  // if current user is the user and is also an admin
+  // set id, body, run mongoose validators on updated data
+  bootcamp = await Bootcamp.findOneAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
   res.status(200).json({
     success: true,
     data: bootcamp,
@@ -105,6 +112,11 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     return next(
       new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
     );
+  }
+
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`user with role ${req.user.role} si not athorized to delete this bootcamp`))
   }
 
   // trigger the 'middleware -2' in Bootcamp model, and remove bootcamp
@@ -129,6 +141,12 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 400)
     );
   }
+
+  // if current user is not bootcamp owner and his role is not admin,
+  if (bootcamp.user !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`user with role ${req.user.role} not authorized to upload a photo`), 401);
+  };
+
   // if found - but file not uploaded
   if (!req.files) {
     return next(new ErrorResponse(`Photo not Uplaaded`, 400));
