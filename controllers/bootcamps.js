@@ -43,8 +43,25 @@ exports.getSingleBootcamp = asyncHandler(async (req, res, next) => {
 // route - POST /api/v1/bootcamps
 
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
+
+  // add user to the req.body.user,
+  req.body.user = req.user.id;
+
+  // check bootcamps published by the current user
+  const bootcampsPublished = await Bootcamp.findOne({
+    user: req.user.id
+  })
+
+  // Note: if user is not an admin, add only one bootcamp, else can add any no of bootcamps
+
+  // check if user published a bootcamp and role is not admin,  
+  if (bootcampsPublished && req.user.role !== 'admin') {
+    // return error since already added a bootcamp
+    return next(new ErrorResponse(`the role ${req.user.role} already added one bootcamp- cant add more`, 400))
+  }
   // await for the Promise to get resolved
   const bootcamp = await Bootcamp.create(req.body);
+
   // send back the resposne - 201: since new resource created
   res.status(201).json({
     succes: true,

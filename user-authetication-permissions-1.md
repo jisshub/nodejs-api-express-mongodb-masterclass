@@ -417,7 +417,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
   } catch (err) {
     return next(new ErrorResponse('not authorzed tp access the route', 401));
   }
-});```
+});
+```
 
 - next , use this middleware before routes that require private access.
 

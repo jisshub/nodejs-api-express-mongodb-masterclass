@@ -6,9 +6,12 @@ const Course = require('./models/Courses');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const colors = require('colors');
+const User = require('./models/User');
 
 // load env vars
-dotenv.config({ path: './config/config.env' });
+dotenv.config({
+  path: './config/config.env'
+});
 
 // connect to db
 mongoose.connect(process.env.MONGO_URI, {
@@ -22,6 +25,9 @@ mongoose.connect(process.env.MONGO_URI, {
 const data = fs.readFileSync('./_data/bootcamps.json', 'utf8');
 // get courses
 const courses = fs.readFileSync('./_data/courses.json', 'utf8');
+// get users
+const users = fs.readFileSync('./_data/users.json', 'utf8')
+
 
 // import data to db.
 const importData = async () => {
@@ -29,6 +35,7 @@ const importData = async () => {
     //  parse the json array to an array of object - resolve the data - save to db.
     await Bootcamp.create(JSON.parse(data));
     await Course.create(JSON.parse(courses));
+    await User.create(JSON.parse(users));
     // green.inverse - color of log message
     console.log('Data saved'.green.inverse);
     // exit the process
@@ -44,6 +51,7 @@ const deleteData = async () => {
   try {
     await Bootcamp.deleteMany();
     await Course.deleteMany();
+    await User.deleteMany();
     console.log('Data deleted..'.red.inverse);
     // finally exit the process
     process.exit();
