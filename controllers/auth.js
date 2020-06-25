@@ -2,6 +2,7 @@ const asyncHandler = require('../middleware/async');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const sendEmail = require('../utils/sendEmails');
+const crypto = require("crypto")
 
 // @desc - user registeration
 // @routes - POST /api/v1/auth/registet
@@ -105,7 +106,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     });
 
     // create reset url,
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/resetpassword/${resetToken}`;
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/auth/resetpassword/${resetToken}`;
     // Example: http://locahost:5000//api/resetpassword/tokenvalue
 
     // set the message
@@ -140,6 +141,40 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     };
 
 });
+
+// @desc- reset the password
+// @route - PUT /api/v1/auth/resetpassword/:resettoken
+// @access - Public
+
+exports.passwordReset = asyncHandler(async (req, res, next) => {
+    // first get the hashed token an store it to resetPasswordToken variable,
+    const resetPasswordToken = await crypto.createHash("sha256").update(req.params.resettoken)
+        .digest("hex");
+
+    // find user using resetPasswordToken and resetPasswordExpire
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: {
+            $gt: Date.now()
+        }
+    });
+    // if user found
+    if (user) {
+        // set new password
+        user.password = req.body.password;
+        // set resetPasswordToken and resetPasswordExpire to undefined
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        // finally save the user
+        await user.save();
+
+        // call sendTokenResponse
+        sendTokenResponse(user, 200, res)
+    } else {
+        return next(new ErrorResponse('invalid token', 400))
+    }
+})
+
 
 // get token, create cookie and send token with in cookie as respone
 const sendTokenResponse = (user, statusCode, res) => {
