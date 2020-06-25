@@ -44,6 +44,10 @@ const UserSchema = mongoose.Schema({
 
 // middleware - hash password b4 saving to db - use bcrypt
 UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        next();
+    }
+
     // generates salt using genSalt(10) - 10 - no of rounds - higher rounds - more security.
     const salt = await bcrypt.genSalt(10);
 
@@ -88,9 +92,6 @@ UserSchema.methods.getResetPasswordToken = function () {
 
     // set the token expiry after 10 days - assign it to resetTokenExpire field,
     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
-
-    console.log("reset password token:", this.resetPasswordToken);
-    console.log("reset password expire:", this.resetPasswordExpire);
 
     // return original token
     return resetToken;

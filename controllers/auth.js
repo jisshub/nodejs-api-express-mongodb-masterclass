@@ -1,7 +1,6 @@
-const asyncHandler = require("../middleware/async");
-const User = require("../models/User");
+const asyncHandler = require('../middleware/async');
+const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
-
 
 // @desc - user registeration
 // @routes - POST /api/v1/auth/registet
@@ -13,18 +12,18 @@ exports.register = asyncHandler(async (req, res, next) => {
         email,
         password,
         role
-    } = req.body
+    } = req.body;
 
     // create user - pass fields as object
     const user = await User.create({
         name,
         email,
         password,
-        role
-    })
+        role,
+    });
 
     // invoke sendTokenResponse()- pass args
-    sendTokenResponse(user, 200, res)
+    sendTokenResponse(user, 200, res);
 });
 
 // @desc - user login
@@ -40,26 +39,26 @@ exports.login = asyncHandler(async (req, res, next) => {
 
     // validate email, password
     if (!email || !password) {
-        return next(new ErrorResponse("no email and password", 400));
+        return next(new ErrorResponse('no email and password', 400));
     }
 
     // if inputs given, check user exist in db/not by matching email with email in db, select password to validate
     const user = await User.findOne({
-        email
+        email,
     }).select('+password');
 
     // if no user exist,
     if (!user) {
-        return next(new ErrorResponse("invalid credentials", 401));
-    };
+        return next(new ErrorResponse('invalid credentials', 401));
+    }
 
     // check if password matches - pass password as argument - use await, since v use await before bcrypt.compare()
     const isMatch = await user.matchPasswords(password);
 
     // if password not match
     if (!isMatch) {
-        return next(new ErrorResponse('invalid cedentials', 401))
-    };
+        return next(new ErrorResponse('invalid cedentials', 401));
+    }
 
     // invoke sendTokenResponse()- pass args
     sendTokenResponse(user, 200, res);
@@ -75,33 +74,42 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     // send back the response
     res.status(200).json({
         success: true,
-        data: user
-    })
+        data: user,
+    });
 });
 
-
-// @desc - FORGOT password- genrate token 
+// @desc - FORGOT password- genrate token
 // @route - GET /api/v1/auth/forgotpassword
-// @access - Public 
+// @access - Public
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
     // find the user with email that matches the email in the body
-    console.log(req.body.email);
 
     const user = await User.findOne({
-        email: req.body.email
+        email: req.body.email,
     });
 
-    // if no user 
+    // if no user
     if (!user) {
-        return next(new ErrorResponse(`no user with email ${req.body.email} found`, 404))
+        return next(
+            new ErrorResponse(`no user with email ${req.body.email} found`, 404)
+        );
     }
-    // resetToken constant gets token returned from 
+    // resetToken constant gets token returned from
     // getResetPasswordToken() method in User model
     const resetToken = user.getResetPasswordToken();
 
-    console.log('resetToken:' + resetToken);
-});
+    // save data to current user in db without validation,
+    await user.save({
+        validateBeforeSave: false
+    });
 
+
+
+    //   send response
+    res.status(200).json({
+        user
+    });
+});
 
 // get token, create cookie and send token with in cookie as respone
 const sendTokenResponse = (user, statusCode, res) => {
@@ -111,10 +119,12 @@ const sendTokenResponse = (user, statusCode, res) => {
     // set options for the cookie
     const options = {
         // cookie expires in current date + 30 days.
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+        ),
 
         // cookie accessible oly thru client side script, set httpOnly to true
-        httpOnly: true
+        httpOnly: true,
     };
 
     // if production mode, set secure flag to true,
@@ -124,11 +134,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     }
 
     // send back the response with cookie having token in it.
-    res
-        .status(statusCode)
-        .cookie('cookie-1', token, options)
-        .json({
-            success: true,
-            token: token
-        });
-}
+    res.status(statusCode).cookie('cookie-1', token, options).json({
+        success: true,
+        token: token,
+    });
+};

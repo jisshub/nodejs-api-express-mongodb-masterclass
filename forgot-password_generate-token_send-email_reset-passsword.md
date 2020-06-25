@@ -24,7 +24,10 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // getResetPasswordToken() method in User model
   const resetToken = user.getResetPasswordToken();
 
-  console.log(resetToken);
+  //   send response
+  res.status(200).json({
+    user,
+  });
 });
 ```
 
@@ -33,13 +36,6 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 **model/User.js**
 
 ```javascript
-// match user entered password with hashed password
-UserSchema.methods.matchPasswords = async function (userEnteredPassword) {
-  // compare passwords - return true/false, use compare()
-  return await bcrypt.compare(userEnteredPassword, this.password);
-  // this.password - hashed one
-};
-
 // generate the token and hash using cryto core module
 UserSchema.methods.getResetPasswordToken = function () {
   // generate token to reset password
@@ -54,11 +50,63 @@ UserSchema.methods.getResetPasswordToken = function () {
   // set the token expiry after 10 days - assign it to resetTokenExpire field,
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
-  // log the data
-  console.log('reset password token:', this.resetPasswordToken);
-  console.log('reset password expire:', this.resetPasswordExpire);
-
   // return original token
   return resetToken;
 };
 ```
+
+### Screenshots
+
+Screenshot 1:
+
+![image](./screenshots/postman_4.png 'image');
+
+Screenshot 2:
+
+![image](./screenshots/postman_5.png 'image');
+
+- Now the returned response/data is not saved to db, to save it under the current user in db.
+
+**controllers/auth.js**
+
+```javascript
+const resetToken = user.getResetPasswordToken();
+
+// save data to current user in db without validation,
+await user.save({
+  validateBeforeSave: false,
+});
+//   send response
+res.status(200).json({
+  user,
+});
+```
+
+- Then send request v gets an error:
+
+![image](./screenshots/postman_6.png 'image');
+
+- To solve it, we have to check password field is modified/not. if not call next middleware
+
+```javascript
+// middleware - hash password b4 saving to db - use bcrypt
+UserSchema.pre('save', async function (next) {
+  // check password is modified/not
+  if (!this.isModified('password')) {
+    next();
+  }
+
+  // generates salt using genSalt(10) - 10 - no of rounds - higher rounds - more security.
+  const salt = await bcrypt.genSalt(10);
+
+  // get password field - use salt to hash it,
+  this.password = await bcrypt.hash(this.password, salt);
+
+  // move to next middlare
+  next();
+});
+```
+
+- Then send the reqeust and check the user collection in db. data is not saved
+
+---
