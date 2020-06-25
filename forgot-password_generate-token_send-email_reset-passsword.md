@@ -312,6 +312,8 @@ router.route('/resetpassword/:resettoken').put(passwordReset);
 
 ![image](./screenshots/postman_12.png 'image')
 
+- _copy and paste that resettoken from the api for PUT request._
+
 **Send PUT request for password reset in postman**
 
 ![image](./screenshots/postman_13.png 'image')
