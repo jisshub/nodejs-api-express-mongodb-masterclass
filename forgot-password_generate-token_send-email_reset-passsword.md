@@ -59,11 +59,11 @@ UserSchema.methods.getResetPasswordToken = function () {
 
 Screenshot 1:
 
-![image](./screenshots/postman_4.png 'image');
+![image](./screenshots/postman_4.png 'image')
 
 Screenshot 2:
 
-![image](./screenshots/postman_5.png 'image');
+![image](./screenshots/postman_5.png 'image')
 
 - Now the returned response/data is not saved to db, to save it under the current user in db.
 
@@ -84,7 +84,7 @@ res.status(200).json({
 
 - Then send request v gets an error:
 
-![image](./screenshots/postman_6.png 'image');
+![image](./screenshots/postman_6.png 'image')
 
 - To solve it, we have to check password field is modified/not. if not call next middleware
 
