@@ -177,3 +177,78 @@ module.exports = sendEmail;
 ```
 
 more on: <https://nodemailer.com/about/>
+
+### use sendEmail utility in auth.js in controllers.
+
+**controllers/auth.js**
+
+```javascript
+// @desc - FORGOT password- genrate token
+// @route - GET /api/v1/auth/forgotpassword
+// @access - Public
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  // find the user with email that matches the email in the body
+
+  const user = await User.findOne({
+    email: req.body.email,
+  });
+
+  // if no user
+  if (!user) {
+    return next(
+      new ErrorResponse(`no user with email ${req.body.email} found`, 404)
+    );
+  }
+  // resetToken constant gets token returned from
+  // getResetPasswordToken() method in User model
+  const resetToken = user.getResetPasswordToken();
+
+  // save data to current user in db without validation,
+  await user.save({
+    validateBeforeSave: false,
+  });
+
+  // create reset url,
+  const resetUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/resetpassword/${resetToken}`;
+  // Example: http://locahost:5000//api/resetpassword/tokenvalue
+
+  // set the message
+  const message = `you are requested for password reset. make a PUT request to ${resetUrl}`;
+
+  try {
+    // define options object
+    await sendEmail({
+      email: user.email,
+      subject: 'password reset',
+      message,
+    });
+
+    // send back the response
+    res.status(200).json({
+      success: true,
+      data: 'Email Send',
+    });
+  } catch (err) {
+    // if any error, reset the resetPasswordExpire and resetPassowrdToken fields
+    console.log(err);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    // save to db - NO VALIDATION
+    await user.save({
+      validateBeforeSave: false,
+    });
+
+    // return an error response
+    return next(new ErrorResponse(`Email not sent`, 500));
+  }
+});
+```
+
+#### ScreenShots:
+
+![image](./screenshots/postman_7.png 'image')
+
+---
