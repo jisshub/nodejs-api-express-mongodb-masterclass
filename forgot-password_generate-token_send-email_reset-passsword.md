@@ -110,3 +110,70 @@ UserSchema.pre('save', async function (next) {
 - Then send the reqeust and check the user collection in db. data is saved
 
 ---
+
+## Send Email
+
+### Using Nodemailer and Mailtrap
+
+<https://nodemailer.com/about/>
+<https://mailtrap.io/>
+
+install _nodemailer_
+
+```bash
+npm i nodemailer
+```
+
+- Set Initial Configs:
+
+**config.env**
+
+```shell
+SMTP_HOST =
+smtp.mailtrap.io
+SMTP_PORT = 2525
+SMTP_EMAIL = 20d86a415f7970
+SMTP_PASSWORD = 05e34cdd3ec02e
+FROM_EMAIL = noreplay@devcamper.io
+FROM_NAME = DevCamper
+```
+
+- Next create a utility to send emails
+
+**utils/sendEmail.js**
+
+```javascript
+const nodemailer = require('nodemailer');
+
+const sendEmail = async (options) => {
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    auth: {
+      user: process.env.SMTP_EMAIL,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
+
+  // send mail with defined transport object
+  let message = {
+    from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`, // sender address
+    to: options.email, // receiver mail
+    subject: options.subject, // Subject line
+    text: options.message, // plain text body
+  };
+
+  // set info
+  const info = transporter.sendMail(message);
+
+  console.log('Message sent: %s', info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+};
+// export the sendEmail function
+module.exports = sendEmail;
+```
+
+more on: <https://nodemailer.com/about/>

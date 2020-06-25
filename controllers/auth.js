@@ -1,6 +1,7 @@
 const asyncHandler = require('../middleware/async');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const sendEmail = require('../utils/sendEmails');
 
 // @desc - user registeration
 // @routes - POST /api/v1/auth/registet
@@ -103,12 +104,41 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
         validateBeforeSave: false
     });
 
+    // create reset url,
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/resetpassword/${resetToken}`;
+    // Example: http://locahost:5000//api/resetpassword/tokenvalue
 
+    // set the message
+    const message = `you are requested for password reset. make a PUT request to ${resetUrl}`;
 
-    //   send response
-    res.status(200).json({
-        user
-    });
+    try {
+        // define options object 
+        await sendEmail({
+            email: user.email,
+            subject: "password reset",
+            message
+        });
+
+        // send back the response
+        res.status(200).json({
+            success: true,
+            data: "Email Send"
+        });
+    } catch (err) {
+        // if any error, reset the resetPasswordExpire and resetPassowrdToken fields
+        console.log(err);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        // save to db - NO VALIDATION
+        await user.save({
+            validateBeforeSave: false
+        });
+
+        // return an error response
+        return next(new ErrorResponse(`Email not sent`, 500));
+    };
+
 });
 
 // get token, create cookie and send token with in cookie as respone
