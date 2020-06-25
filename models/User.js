@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 // require jwt
 const jwt = require('jsonwebtoken');
+// require crypto
+const crypto = require("crypto");
 
 // define a UserSchmea
 const UserSchema = mongoose.Schema({
@@ -72,8 +74,27 @@ UserSchema.methods.getSignedJwtToken = function () {
 UserSchema.methods.matchPasswords = async function (userEnteredPassword) {
     // compare passwords - return true/false, use compare()
     return await bcrypt.compare(userEnteredPassword, this.password)
-    // this.password- hashed one
+    // this.password - hashed one
 }
 
-// edxport the schema -
+// generate the token and hash using cryto core module
+UserSchema.methods.getResetPasswordToken = function () {
+
+    // generate token to reset password
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    // hash the token - digest it to string and pass it to resetPasswordToken field in Model.
+    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+    // set the token expiry after 10 days - assign it to resetTokenExpire field,
+    this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+    console.log("reset password token:", this.resetPasswordToken);
+    console.log("reset password expire:", this.resetPasswordExpire);
+
+    // return original token
+    return resetToken;
+}
+
+// export the schema -
 module.exports = mongoose.model('User', UserSchema);

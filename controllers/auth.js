@@ -65,6 +65,44 @@ exports.login = asyncHandler(async (req, res, next) => {
     sendTokenResponse(user, 200, res);
 });
 
+// @desc - get the current logged in user
+// @route - GET /api/v1/auth/me
+// access - Private
+
+exports.getMe = asyncHandler(async (req, res, next) => {
+    // get the user
+    const user = await User.findById(req.user.id);
+    // send back the response
+    res.status(200).json({
+        success: true,
+        data: user
+    })
+});
+
+
+// @desc - FORGOT password- genrate token 
+// @route - GET /api/v1/auth/forgotpassword
+// @access - Public 
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+    // find the user with email that matches the email in the body
+    console.log(req.body.email);
+
+    const user = await User.findOne({
+        email: req.body.email
+    });
+
+    // if no user 
+    if (!user) {
+        return next(new ErrorResponse(`no user with email ${req.body.email} found`, 404))
+    }
+    // resetToken constant gets token returned from 
+    // getResetPasswordToken() method in User model
+    const resetToken = user.getResetPasswordToken();
+
+    console.log('resetToken:' + resetToken);
+});
+
+
 // get token, create cookie and send token with in cookie as respone
 const sendTokenResponse = (user, statusCode, res) => {
     // if matches, create token and send success repsonse to client
@@ -94,17 +132,3 @@ const sendTokenResponse = (user, statusCode, res) => {
             token: token
         });
 }
-
-// @desc - get the current logged in user
-// @route - GET /api/v1/auth/me
-// access - Private
-
-exports.getMe = asyncHandler(async (req, res, next) => {
-    // get the user
-    const user = await User.findById(req.user.id);
-    // send back the response
-    res.status(200).json({
-        success: true,
-        data: user
-    })
-})
