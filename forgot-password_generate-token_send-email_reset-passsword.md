@@ -107,6 +107,6 @@ UserSchema.pre('save', async function (next) {
 });
 ```
 
-- Then send the reqeust and check the user collection in db. data is not saved
+- Then send the reqeust and check the user collection in db. data is saved
 
 ---
