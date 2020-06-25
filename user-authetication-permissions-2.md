@@ -225,4 +225,73 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
     success: true,
   });
 });
+
+
+// @desc - delete a course
+// @route - PUT /api/v1/courses/:id
+// @access- private
+
+exports.deleteACourse = asyncHandler(async (req, res, next) => {
+  // find the course
+  let course = await Courses.findById(req.params.id);
+
+  // if cousre found
+  if (course) {
+    // check sure user is the owner  of the course and also an admin.
+    if (course.user.toString() === req.user.id && req.user.role === 'admin') {
+      course = await Courses.findOneAndDelete(req.params.id);
+      // send back the resposne to clienT
+      res.status(200).json({
+        success: true,
+        msg: 'data deleted',
+      });
+    } else {
+      // if not the course onwer and admin
+      return next(new ErrorResponse(`user ${req.user.id} notauthorized to delete the course ${course._id}`));
+    }
+  }
+  // if course not found,
+  return next(new ErrorResponse(`course not found with id ${req.params.id}`));
+
+
+
+
+
+// @PUT - update a course
+// @route - PUT /api/v1/course/:id
+// @access - Private
+
+exports.updateACourse = asyncHandler(async (req, res, next) => {
+  // find course by id
+  let course = await Courses.findById(req.params.id);
+  // if no course exist
+  if (!course) {
+    return next(
+      new ErrorResponse(`course with id ${req.params.id} no found`),
+      404
+    );
+  }
+
+  // if course owner is not the one trying to update and not an admin
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `user ${req.user.id} not authorized to update the course ${course._id}`
+      )
+    );
+  }
+
+  // if user -> course owner and admin, update the course
+  course = await Courses.findOneAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  // send bakc the response
+  res.status(200).json({
+    success: true,
+    data: course,
+  });
+});
+
 ```
