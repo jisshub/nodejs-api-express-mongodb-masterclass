@@ -43,15 +43,15 @@ router.route('/updatedetails').put(protect, updateUserDetails);
 
 ![image](./screenshots/postman_22.png 'image')
 
-#### Screenshot 1: create PUT request - give req.body
+#### Screenshot 2: create PUT request - give req.body
 
 ![image](./screenshots/postman_18.png 'image')
 
-#### Screenshot 2: set Headers
+#### Screenshot 3: set Headers
 
 ![image](./screenshots/postman_19.png 'image')
 
-#### Screenshot 3: set Authorization as _Bearer Token_
+#### Screenshot 4: set Authorization as _Bearer Token_
 
 ![image](./screenshots/postman_20.png 'image');
 
@@ -94,15 +94,19 @@ router.route('/updatepassword').put(protect, updatePassword);
 
 ### Screenshots:
 
-#### Screenshot 1: set PUT request here - give req.body
+#### Screenshot 1: Login First
+
+![image](./screenshots/postman_23.png 'image')
+
+#### Screenshot 2: set PUT request here - give req.body
 
 ![image](./screenshots/postman14.png 'image')
 
-#### Screenshot 2: set Headers
+#### Screenshot 3: set Headers
 
 ![image](./screenshots/postman_17.png 'image')
 
-#### Screenshot 3: set Authorization as _Bearer Token_
+#### Screenshot 4: set Authorization as _Bearer Token_
 
 ![image](./screenshots/postman_16.png 'image');
 
