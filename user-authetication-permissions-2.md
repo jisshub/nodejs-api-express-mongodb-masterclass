@@ -19,7 +19,7 @@ user: {
 ```javascript
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
   // add current user's id to the req.body.user field in the document
-  req.body.useruser = req.user.id;
+  req.body.user = req.user.id;
 
   // check bootcamps published by the current user
   const bootcampsPublished = await Bootcamp.findOne({
