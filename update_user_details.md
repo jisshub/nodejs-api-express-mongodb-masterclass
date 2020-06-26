@@ -39,6 +39,10 @@ router.route('/updatedetails').put(protect, updateUserDetails);
 
 ### Screenshots:
 
+#### Screenshot 1: Login First
+
+![image](./screenshots/postman_22.png 'image')
+
 #### Screenshot 1: create PUT request - give req.body
 
 ![image](./screenshots/postman_18.png 'image')
