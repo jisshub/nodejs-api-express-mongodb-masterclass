@@ -35,15 +35,15 @@ router.route('/updatepassword').put(protect, updatePassword);
 
 ### Screenshots:
 
-Screenshot 1:
+#### Screenshot 1: set PUT request here - give req.body
 
 ![image](./screenshots/postman14.png 'image')
 
-Screenshot 2:
+#### Screenshot 2: set Headers
 
 ![image](./screenshots/postman_17.png 'image')
 
-Screenshot 1:
+#### Screenshot 3: set Authorization as _Bearer Token_
 
 ![image](./screenshots/postman_16.png 'image');
 
