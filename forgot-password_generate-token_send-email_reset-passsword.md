@@ -1,5 +1,7 @@
 # Forgot Password
 
+- define a controller for this request
+
 **contoller/auth.js**
 
 ```javascript
