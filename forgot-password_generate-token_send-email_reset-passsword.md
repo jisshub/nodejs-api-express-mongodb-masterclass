@@ -219,6 +219,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // set the message
   const message = `you are requested for password reset. make a PUT request to ${resetUrl}`;
 
+  // use sendEmail utility here, <utils/sendEmail.js>
   try {
     // define options object
     await sendEmail({
