@@ -96,7 +96,8 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Bootcamp with id ${req.params.id} not found`)
     );
   }
-  // if current user is not bootcamp owner and his role is not admin, her bootcamp.user is an objec, convert to String.
+  // if current user is not bootcamp owner and his role is not admin, her bootcamp.user is a field in bootcamp which is an object,so  convert to String.
+  // before comparing with current user id.
   if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
