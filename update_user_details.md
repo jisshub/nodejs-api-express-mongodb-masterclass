@@ -1,3 +1,58 @@
+# Update User Details - name and email
+
+- create a user updatedetails controller
+
+**controllers/auth.js**
+
+```javascript
+// @desc - update user details
+// @routes - PUT /api/v1/auth/updatedetails
+// @access - Private
+exports.updateUserDetails = asyncHandler(async (req, res, next) => {
+  // set field to update
+  const fieldsToUpdate = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  // find the user and update - validate
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    new: true,
+    runValidators: true,
+  });
+
+  //   return response
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+```
+
+- set routes for this controller
+
+**routes/auth.js**
+
+```javascript
+router.route('/updatedetails').put(protect, updateUserDetails);
+```
+
+### Screenshots:
+
+#### Screenshot 1: create PUT request - give req.body
+
+![image](./screenshots/postman_18.png 'image')
+
+#### Screenshot 2: set Headers
+
+![image](./screenshots/postman_19.png 'image')
+
+#### Screenshot 3: set Authorization as _Bearer Token_
+
+![image](./screenshots/postman_20.png 'image');
+
+---
+
 # Update User Password
 
 - create a user updateapssword controller
