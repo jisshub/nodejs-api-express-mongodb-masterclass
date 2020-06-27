@@ -106,3 +106,17 @@ module.exports = router;
 const users = require('./routes/users');
 app.use('/api/v1/auth/users', users);
 ```
+
+### Screenshots
+
+**Screenshot 1: User Login at First**
+
+![image](./screenshots/postman_28.png 'image')
+
+**Screenshot 2: create POST request**
+
+![image](./screenshots/postman_25.png 'image')
+
+**screenshot 3: set Authorization type to Bearer Token**
+
+![image](./screenshots/postman_26.png 'image')

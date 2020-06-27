@@ -35,7 +35,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-// grant access to the spcific roles
+// grant access to the specific roles
 exports.authorize = (...roles) => {
   return (req, res, next) => {
     // check if current user role is included in roles array recieved,

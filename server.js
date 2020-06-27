@@ -17,7 +17,6 @@ const morgan = require('morgan');
 
 // require connectDB
 const connectDB = require('./config/db');
-app.use('/api/v1/auth/users', users);
 
 const fileupload = require('express-fileupload');
 const cookieParser = require("cookie-parser");

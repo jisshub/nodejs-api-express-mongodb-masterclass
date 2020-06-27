@@ -70,6 +70,7 @@ exports.removeUser = asyncHandler(async (req, res, next) => {
     });
     res.status(200).json({
         success: true,
+        msg: "data deleted",
         data: {}
     });
 });
