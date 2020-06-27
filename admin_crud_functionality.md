@@ -115,7 +115,7 @@ app.use('/api/v1/auth/users', users);
 
 ![image](./screenshots/postman_28.png 'image')
 
-**Screenshot 2: Check User role is Admin**
+**Screenshot 2: Check Logged-in User role is Admin**
 
 ![image](./screenshots/postman_29.png 'image')
 
