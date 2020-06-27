@@ -119,7 +119,7 @@ app.use('/api/v1/auth/users', users);
 
 ![image](./screenshots/postman_29.png 'image')
 
-**Screenshot 2: create POST request**
+**Screenshot 3: create POST request**
 
 ![image](./screenshots/postman_25.png 'image')
 
