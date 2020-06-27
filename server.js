@@ -5,22 +5,21 @@ const path = require('path');
 
 // require the xpress router exported
 const bootcamps = require('./routes/bootcamps');
-
 const courses = require('./routes/courses');
-
 const auth = require('./routes/auth');
+const users = require("./routes/users")
+
 // ewquire erroHandler middleware
 const errorHandler = require('./middleware/error');
 
 // require morgan middleware
 const morgan = require('morgan');
-const advancedResult = require('./middleware/advancedResults');
 
 // require connectDB
 const connectDB = require('./config/db');
-const Courses = require('./models/Courses');
+
 const fileupload = require('express-fileupload');
-const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser");
 
 
 
@@ -39,6 +38,7 @@ const app = express();
 app.use(express.json());
 
 // use morgan middlware in devlelopment m ode
+const advancedResult = require('./middleware/advancedResults');
 if (process.env.NODE_ENV === 'development') {
   // use morgan- pass any argument.
   app.use(morgan('tiny'));
@@ -61,7 +61,8 @@ app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
 // use auth router
 app.use("/api/v1/auth", auth);
-
+// use admin user route
+app.use('/api/v1/auth/users', users);
 
 // use errorHandler middleware
 app.use(errorHandler);
