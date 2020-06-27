@@ -12,7 +12,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
     }
     res.status(200).json({
         success: true,
-        count: users.length(),
+        count: users.length,
         data: users
     });
 });

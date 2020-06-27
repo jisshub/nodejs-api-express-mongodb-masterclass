@@ -38,6 +38,17 @@ exports.getSingleUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc - CREATE A USER
+// @route - POST /api/v1/auth/users
+// @access - Private
+exports.createUser = asyncHandler(async (req, res, next) => {
+  const user = await User.create(req.body);
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
 // @desc - Update A USER
 // @route - PUT /api/v1/auth/users/:id
 // @access - Private
@@ -69,4 +80,29 @@ exports.removeUser = asyncHandler(async (req, res, next) => {
     data: {},
   });
 });
+```
+
+**routes/users.js**
+
+```javascript
+const router = express.Router();
+
+// use protect and authorize middleware for below routes
+router.use(protect);
+router.use(authorize('admin')); // role should be an admin
+
+// below routes will use protect and authorize.
+
+// set routes
+router.route('/').get(getAllUsers).post(createUser);
+router.route('/:id').put(updateUser).delete(removeUser).get(getSingleUser);
+
+module.exports = router;
+```
+
+**server.js**
+
+```javascript
+const users = require('./routes/users');
+app.use('/api/v1/auth/users', users);
 ```
