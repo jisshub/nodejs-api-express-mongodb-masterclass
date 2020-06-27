@@ -123,6 +123,6 @@ app.use('/api/v1/auth/users', users);
 
 ![image](./screenshots/postman_25.png 'image')
 
-**screenshot 3: set Authorization type to Bearer Token**
+**screenshot 4: set Authorization type to Bearer Token**
 
 ![image](./screenshots/postman_26.png 'image')
