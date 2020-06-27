@@ -1,6 +1,6 @@
 # Admin CRUD Funcitons
 
-## Only admin user have the authority to do CRUD operations on users model
+## Only admin user role have the authority to do CRUD operations on users model
 
 - create a controller for this functions
 
@@ -107,11 +107,17 @@ const users = require('./routes/users');
 app.use('/api/v1/auth/users', users);
 ```
 
+- user should be _admin_ role to do this crud operations - any other role are not allowed to do this. ie admin is only authorized tp access this routes.
+
 ### Screenshots
 
 **Screenshot 1: User Login at First**
 
 ![image](./screenshots/postman_28.png 'image')
+
+**Screenshot 2: Check User role is Admin**
+
+![image](./screenshots/postman_29.png 'image')
 
 **Screenshot 2: create POST request**
 
