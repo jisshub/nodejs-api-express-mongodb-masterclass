@@ -126,3 +126,5 @@ app.use('/api/v1/auth/users', users);
 **screenshot 4: set Authorization type to Bearer Token**
 
 ![image](./screenshots/postman_26.png 'image')
+
+- Watch the demo here: <https://youtu.be/FNQ2CBtir2o>
