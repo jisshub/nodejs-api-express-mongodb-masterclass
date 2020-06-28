@@ -127,4 +127,4 @@ app.use('/api/v1/auth/users', users);
 
 ![image](./screenshots/postman_26.png 'image')
 
-- Watch the demo here: <https://youtu.be/FNQ2CBtir2o>
+- [Watch the Demo](https://youtu.be/FNQ2CBtir2o)
