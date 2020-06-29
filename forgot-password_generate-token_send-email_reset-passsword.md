@@ -26,7 +26,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // getResetPasswordToken() method in User model
   const resetToken = user.getResetPasswordToken();
 
-  //   send response- with current user 
+  //   send response- with current user
   res.status(200).json({
     user,
   });
@@ -52,7 +52,7 @@ UserSchema.methods.getResetPasswordToken = function () {
   // set the token expiry after 10 days - assign it to resetTokenExpire field,
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
-  // return original token to resetToken constant in forgotPassword controller. 
+  // return original token to resetToken constant in forgotPassword controller.
   return resetToken;
 };
 ```
@@ -250,7 +250,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 });
 ```
 
-### ScreenShots:
+### ScreenShots
 
 ![image](./screenshots/postman_7.png 'image')
 

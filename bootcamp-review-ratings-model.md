@@ -97,12 +97,12 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
   // check if params have bootcampId,
   if (req.params.bootcampId) {
     // get reviews of that specific bootcamp
-    query = await Review.find({
+    query = Review.find({
       bootcamp: req.params.bootcampId,
     });
   } else {
     // get all reviews if no params
-    query = await Review.find().populate('bootcamp', 'name description');
+    query = Review.find().populate('bootcamp', 'name description');
   }
   // exceute the query
   const reviews = await query;
@@ -120,7 +120,9 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
 **routes/reviews.js**
 
 ```javascript
-const router = express.Router();
+const router = express.Router({
+  mergeParams: true,
+});
 
 // routes
 router.route('/').get(getReviews);
@@ -147,3 +149,33 @@ app.use('/api/v1/reviews', reviews);
 ```
 
 ---
+
+## Get single review
+
+**controllers/reviews.js**
+
+```javascript
+// @desc - GET a single review
+// @route - GET /api/v1/reviews/:id
+// @access - Private
+exports.getSingleReview = asyncHandler(async (req, res, next) => {
+  // get review and polulate the result with bootcamp name, description
+  const review = await Review.findById(req.params.id).populate(
+    'bootcamp',
+    'name description'
+  );
+  if (!review) {
+    return next(new ErrorResponse('no review found', 404));
+  }
+  res.status(200).json({
+    success: true,
+    data: review,
+  });
+});
+```
+
+**routes/reviews.js**
+
+```javascript
+router.route('/:id').get(getSingleReview);
+```

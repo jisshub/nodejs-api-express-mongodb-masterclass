@@ -31,7 +31,7 @@ const courses = fs.readFileSync('./_data/courses.json', 'utf8');
 // get users
 const users = fs.readFileSync('./_data/users.json', 'utf8')
 // get reviews file
-const reviews = fs.readFileSync("/_data/reviews.json", "utf8");
+const reviews = fs.readFileSync("./_data/reviews.json", "utf8");
 
 // import data to db.
 const importData = async () => {
@@ -57,7 +57,7 @@ const deleteData = async () => {
     await Bootcamp.deleteMany();
     await Course.deleteMany();
     await User.deleteMany();
-    await Review.deleteMany()
+    await Review.deleteMany();
     console.log('Data deleted..'.red.inverse);
     // finally exit the process
     process.exit();
