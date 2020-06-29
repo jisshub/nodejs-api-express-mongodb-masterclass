@@ -148,6 +148,14 @@ router.use('/:bootcampId/reviews', reviewRouter);
 app.use('/api/v1/reviews', reviews);
 ```
 
+**Screenshot: get all revieews**
+
+![image](./screenshots/p.png, 'image')
+
+**Screenshot: get reviews of a bootcamp**
+
+![image](./screenshots/p1.png, 'image')
+
 ---
 
 ## Get single review
@@ -179,6 +187,10 @@ exports.getSingleReview = asyncHandler(async (req, res, next) => {
 ```javascript
 router.route('/:id').get(getSingleReview);
 ```
+
+**Screenshot**
+
+![image](./screenshots/p2.png 'image')
 
 ---
 
