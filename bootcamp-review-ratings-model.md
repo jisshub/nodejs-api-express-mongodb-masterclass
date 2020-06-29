@@ -179,3 +179,80 @@ exports.getSingleReview = asyncHandler(async (req, res, next) => {
 ```javascript
 router.route('/:id').get(getSingleReview);
 ```
+
+---
+
+## Add/Create a review for bootcamp
+
+- Only role _user_ has the authority to add review for bootcamp.
+  **controllers/reviews.js**
+
+```javascript
+// @desc- create review
+// @route - POST /api/v1/bootcamps/:bootcampId/reviews
+// @access - Private
+exports.createReview = asyncHandler(async (req, res, next) => {
+  // assign bootcampId to bootcamp in body,
+  req.body.bootcamp = req.params.bootcampId;
+  // assign current user id to body.user
+  req.body.user = req.user.id;
+
+  // find the bootcamp by bootcampId
+  const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+
+  // check bootcamp exist/not
+  if (!bootcamp) {
+    return new ErrorResponse(
+      `bootcamp with id ${req.params.bootcampId} not found`,
+      404
+    );
+  }
+
+  // if user role is not 'user'
+  if (req.user.role !== 'user') {
+    return next(
+      new ErrorResponse(
+        `user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`
+      )
+    );
+  }
+
+  // add review if role is 'user'
+  const review = await Review.create(req.body);
+
+  // send resposne
+  res.status(201).json({
+    success: true,
+    review,
+  });
+});
+```
+
+## set routes
+
+**routes/reviews.js**
+
+```javascript
+// create route - user protect and authirize middleware here
+router.route('/').post(protect, authorize('user'), createReview);
+```
+
+## Screenshots
+
+**Screenshot 1: User login**
+
+[!image](./screenshots/review-create-3.png 'image')
+
+**Screenshot 2: check role is user**
+
+[!image](./screenshots/review_create-4.png 'image')
+
+**Screenshot 3: create POST request**
+
+[!image](./screenshots/review_create-1.png 'image')
+
+**Screenshot 4: set authorization type**
+
+[!image](./screenshots/review-create-2.png 'image')
+
+---

@@ -2,6 +2,7 @@ const asyncHandler = require('../middleware/async');
 const advancedResult = require('../middleware/advancedResults');
 const Review = require('../models/Review');
 const ErrorResponse = require('../utils/errorResponse');
+const Bootcamp = require('../models/Bootcamp');
 
 // @desc - GET All Reviews
 // @route - GET /api/v1/reviews,
@@ -46,3 +47,35 @@ exports.getSingleReview = asyncHandler(async (req, res, next) => {
         data: review,
     });
 });
+
+// @desc- create review
+// @route - POST /api/v1/bootcamps/:bootcampId/reviews
+// @access - Private
+exports.createReview = asyncHandler(async (req, res, next) => {
+    // assign bootcampId to bootcamp in body,
+    req.body.bootcamp = req.params.bootcampId;
+    // assign current user id to body.user
+    req.body.user = req.user.id;
+
+    // find the bootcamp by bootcampId
+    const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+
+    // check bootcamp exist/not
+    if (!bootcamp) {
+        return new ErrorResponse(`bootcamp with id ${req.params.bootcampId} not found`, 404);
+    }
+
+    // if user role is not 'user'
+    if (req.user.role !== 'user') {
+        return next(new ErrorResponse(`user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`))
+    }
+
+    // add review if role is 'user'
+    const review = await Review.create(req.body)
+
+    // send resposne
+    res.status(201).json({
+        success: true,
+        review
+    });
+})
