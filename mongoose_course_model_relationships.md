@@ -149,6 +149,7 @@ module.exports = router;
 **routes/bootcamps.js**
 
 ```javascript
+const courseRouter = require('./courses');
 // re-route/use courseRouter.
 router.use('/:bootcampId/courses', courseRouter);
 
