@@ -241,18 +241,18 @@ router.route('/').post(protect, authorize('user'), createReview);
 
 **Screenshot 1: User login**
 
-[!image](./screenshots/review-create-3.png 'image')
+![image](./screenshots/review-create-3.png 'image')
 
 **Screenshot 2: check role is user**
 
-[!image](./screenshots/review_create-4.png 'image')
+![image](./screenshots/review_create-4.png 'image')
 
 **Screenshot 3: create POST request**
 
-[!image](./screenshots/review_create-1.png 'image')
+![image](./screenshots/review_create-1.png 'image')
 
 **Screenshot 4: set authorization type**
 
-[!image](./screenshots/review-create-2.png 'image')
+![image](./screenshots/review-create-2.png 'image')
 
 ---
