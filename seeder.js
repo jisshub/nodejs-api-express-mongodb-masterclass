@@ -1,12 +1,15 @@
 const fs = require('fs');
 const path = require('path');
+
 const Bootcamp = require('./models/Bootcamp');
-// require Cousre Model
 const Course = require('./models/Courses');
+const User = require('./models/User');
+const Review = require("./models/Review");
+
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const colors = require('colors');
-const User = require('./models/User');
+
 
 // load env vars
 dotenv.config({
@@ -27,7 +30,8 @@ const data = fs.readFileSync('./_data/bootcamps.json', 'utf8');
 const courses = fs.readFileSync('./_data/courses.json', 'utf8');
 // get users
 const users = fs.readFileSync('./_data/users.json', 'utf8')
-
+// get reviews file
+const reviews = fs.readFileSync("/_data/reviews.json", "utf8");
 
 // import data to db.
 const importData = async () => {
@@ -36,6 +40,7 @@ const importData = async () => {
     await Bootcamp.create(JSON.parse(data));
     await Course.create(JSON.parse(courses));
     await User.create(JSON.parse(users));
+    await Review.create(JSON.parse(reviews));
     // green.inverse - color of log message
     console.log('Data saved'.green.inverse);
     // exit the process
@@ -52,6 +57,7 @@ const deleteData = async () => {
     await Bootcamp.deleteMany();
     await Course.deleteMany();
     await User.deleteMany();
+    await Review.deleteMany()
     console.log('Data deleted..'.red.inverse);
     // finally exit the process
     process.exit();

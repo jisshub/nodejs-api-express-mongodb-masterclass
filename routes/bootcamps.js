@@ -19,11 +19,15 @@ const {
 
 //
 const courseRouter = require('./courses');
+const reviewRouter = require("./reviews")
+
 const advancedResult = require('../middleware/advancedResults');
 const Bootcamp = require('../models/Bootcamp');
 
-// re-route to other routers
+// re-route to course routers v have below api
 router.use('/:bootcampId/courses', courseRouter);
+// re-route to reviews router if v have below api
+router.use("/:bootcampId/reviews", reviewRouter);
 
 // set routers for get and post with no params
 // use advancedResult middleware to getBootcamps.

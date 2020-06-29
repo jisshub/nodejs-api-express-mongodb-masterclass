@@ -7,7 +7,8 @@ const path = require('path');
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
 const auth = require('./routes/auth');
-const users = require("./routes/users")
+const users = require("./routes/users");
+const reviews = require("./routes/reviews");
 
 // ewquire erroHandler middleware
 const errorHandler = require('./middleware/error');
@@ -54,7 +55,6 @@ app.use(cookieParser())
 // set public as our static folder,
 app.use(express.static(path.join(path.dirname('./'), 'public')));
 
-
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
 // use courses router
@@ -63,6 +63,8 @@ app.use('/api/v1/courses', courses);
 app.use("/api/v1/auth", auth);
 // use admin user route
 app.use('/api/v1/auth/users', users);
+// use reviews routes
+app.use('/api/v1/reviews', reviews);
 
 // use errorHandler middleware
 app.use(errorHandler);

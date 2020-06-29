@@ -6,7 +6,7 @@ const Bootcamp = require('../models/Bootcamp');
 // @desc - get all courses, get course spcific to a bootcamp
 // @access - public
 // @route - GET /api/v1/courses
-// @route - GET /api/v1/bootcamps/    :bootcampId/courses
+// @route - GET /api/v1/bootcamps/:bootcampId/courses
 
 exports.getCourses = asyncHandler(async (req, res, next) => {
   let query;
