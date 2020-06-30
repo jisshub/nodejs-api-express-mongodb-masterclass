@@ -390,9 +390,9 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
 router.route('/:id').put(updateReview);
 ```
 
-# delete review
+---
 
-## cascade delete reviews while bootcamp is deleted
+# cascade delete reviews while bootcamp is deleted
 
 **models/Bootcamp.js**
 
@@ -409,6 +409,24 @@ BootcampSchema.pre('remove', async function (next) {
 });
 ```
 
-# Screenshots
+## Screenshots
 
-**Screenshot 1:**
+**Screenshot 1: User Login**
+
+![image](./screenshots/casacade_3.png 'image')
+
+**Screenshot 2: Check User id admin**
+
+![image](./screenshots/cascade_6.png 'image')
+
+**Screenshot 3: Delete Request**
+
+![image](./screenshots/cascade_2.png 'image')
+
+**Screenshot 4: Finally get reviews of a bootcamp**
+
+![image](./screenshots/cascade_1.png 'image')
+
+---
+
+# delete a review
