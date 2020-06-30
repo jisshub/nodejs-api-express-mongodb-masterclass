@@ -415,7 +415,7 @@ BootcampSchema.pre('remove', async function (next) {
 
 ![image](./screenshots/casacade_3.png 'image')
 
-**Screenshot 2: Check User id admin**
+**Screenshot 2: Check User is admin**
 
 ![image](./screenshots/cascade_6.png 'image')
 
@@ -430,3 +430,33 @@ BootcampSchema.pre('remove', async function (next) {
 ---
 
 # delete a review
+
+**controllers/reviews.js**
+
+```javascript
+// @desc - update reviews
+// @route - PUT /api/v1/reviews/:id
+// @access - Private
+exports.updateReview = asyncHandler(async (req, res, next) => {
+  let review = await Review.findById(req.params.id);
+  if (!review) {
+    return next(
+      new ErrorResponse(`review with id ${req.params.id} not found`, 404)
+    );
+  }
+  review = await Review.findOneAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({
+    success: true,
+    data: review,
+  });
+});
+```
+
+**routes/reviews.js**
+
+```javascript
+router.route('/:id', protect, authorize('user'), deleteReview);
+```

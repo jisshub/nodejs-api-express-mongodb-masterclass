@@ -3,7 +3,8 @@ const {
     getReviews,
     getSingleReview,
     createReview,
-    updateReview
+    updateReview,
+    deleteReview
 } = require("../controllers/reviews");
 const {
     protect,
@@ -16,7 +17,7 @@ const router = express.Router({
 
 // routes
 router.route("/").get(getReviews).post(protect, authorize('user'), createReview);
-router.route("/:id").get(getSingleReview).put(updateReview)
+router.route("/:id").get(getSingleReview).put(updateReview).delete(deleteReview)
 
 // export the router
 module.exports = router;
