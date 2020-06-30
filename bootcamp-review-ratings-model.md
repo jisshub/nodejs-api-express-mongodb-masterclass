@@ -355,3 +355,60 @@ ReviewSchema.pre('remove', function () {
 - login as another user role since a user can add only one review.
 - next add new review for the same bootcamp.
 - get all bootcamps- we can see the _averageRating_ field under that bootcamp.
+
+---
+
+# Update a Review
+
+**controllers/review.js**
+
+```javascript
+// @desc - update reviews
+// @route - PUT /api/v1/reviews/:id
+// @access - Private
+exports.updateReview = asyncHandler(async (req, res, next) => {
+    let review = await Review.findById(req.params.id)
+    if (!review) {
+        return next(new ErrorResponse(`review with id ${req.params.id} not found`, 404));
+    }
+    review = await Review.findOneAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+    res.status(200).json({
+        success: true,
+        data: review
+    })
+
+```
+
+### set routes
+
+**routes/review.js**
+
+```javascript
+router.route('/:id').put(updateReview);
+```
+
+# delete review
+
+## cascade delete reviews while bootcamp is deleted
+
+**models/Bootcamp.js**
+
+```javascript
+// middleware - 3
+// cascade delete reviews when a bootcamp is deleted
+BootcampSchema.pre('remove', async function (next) {
+  // delete review that matches the current bootcamp id with bootcamp field in Review Model.
+  await Review.deleteMany({
+    bootcamp: this._id,
+  });
+  // move to next middleware
+  next();
+});
+```
+
+# Screenshots
+
+**Screenshot 1:**

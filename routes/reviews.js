@@ -2,7 +2,8 @@ const express = require("express");
 const {
     getReviews,
     getSingleReview,
-    createReview
+    createReview,
+    updateReview
 } = require("../controllers/reviews");
 const {
     protect,
@@ -15,7 +16,7 @@ const router = express.Router({
 
 // routes
 router.route("/").get(getReviews).post(protect, authorize('user'), createReview);
-router.route("/:id").get(getSingleReview)
+router.route("/:id").get(getSingleReview).put(updateReview)
 
 // export the router
 module.exports = router;

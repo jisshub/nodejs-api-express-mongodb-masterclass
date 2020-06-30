@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const User = require('./User');
+const Review = require('./Review');
 
 // defne a Schema
 
@@ -133,6 +134,17 @@ BootcampSchema.pre('remove', async function (next) {
   });
   // move to next middleware
 });
+
+// middleware - 3
+// cascade delete reviews when a bootcamp is deleted
+BootcampSchema.pre("remove", async function (next) {
+  // delete review that matches the current bootcamp id with bootcamp field in Review Model.
+  await Review.deleteMany({
+    bootcamp: this._id
+  });
+  // move to next middleware
+  next()
+})
 
 // reverse populate
 BootcampSchema.virtual('courses', {

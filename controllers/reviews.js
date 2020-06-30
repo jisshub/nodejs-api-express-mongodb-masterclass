@@ -40,7 +40,9 @@ exports.getSingleReview = asyncHandler(async (req, res, next) => {
         'name description'
     );
     if (!review) {
-        return next(new ErrorResponse(`no review found with id ${req.params.id}`, 404));
+        return next(
+            new ErrorResponse(`no review found with id ${req.params.id}`, 404)
+        );
     }
     res.status(200).json({
         success: true,
@@ -62,30 +64,61 @@ exports.createReview = asyncHandler(async (req, res, next) => {
 
     // check bootcamp exist/not
     if (!bootcamp) {
-        return new ErrorResponse(`bootcamp with id ${req.params.bootcampId} not found`, 404);
+        return new ErrorResponse(
+            `bootcamp with id ${req.params.bootcampId} not found`,
+            404
+        );
     }
 
     // if user role is not 'user'
     if (req.user.role !== 'user') {
-        return next(new ErrorResponse(`user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`, 401))
+        return next(
+            new ErrorResponse(
+                `user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`,
+                401
+            )
+        );
     }
 
     // get review written by current user
     let review = await Review.findOne({
-        user: req.user.id
+        user: req.user.id,
     });
 
-    // a user can give one review for a bootcamp - if a review added by current user, 
+    // a user can give one review for a bootcamp - if a review added by current user,
     if (review) {
-        return next(new ErrorResponse(`user ${req.user.id} cant post multiple reviews for bootcamp`, 400))
+        return next(
+            new ErrorResponse(
+                `user ${req.user.id} cant post multiple reviews for bootcamp`,
+                400
+            )
+        );
     }
 
     // if no review added by the current user then add new review
-    review = await Review.create(req.body)
+    review = await Review.create(req.body);
 
     // send resposne
     res.status(201).json({
         success: true,
-        review
+        review,
     });
-})
+});
+
+// @desc - update reviews
+// @route - PUT /api/v1/reviews/:id
+// @access - Private
+exports.updateReview = asyncHandler(async (req, res, next) => {
+    let review = await Review.findById(req.params.id)
+    if (!review) {
+        return next(new ErrorResponse(`review with id ${req.params.id} not found`, 404));
+    }
+    review = await Review.findOneAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+    res.status(200).json({
+        success: true,
+        data: review
+    })
+});

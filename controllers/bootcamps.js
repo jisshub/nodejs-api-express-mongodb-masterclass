@@ -119,7 +119,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`user with role ${req.user.role} si not athorized to delete this bootcamp`))
   }
 
-  // trigger the 'middleware -2' in Bootcamp model, and remove bootcamp
+  // trigger the 'middleware 2 and 3' in Bootcamp model, and remove bootcamp
   bootcamp.remove();
   // sent the response back
   res.status(200).json({
