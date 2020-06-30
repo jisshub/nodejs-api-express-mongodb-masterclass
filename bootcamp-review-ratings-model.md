@@ -83,7 +83,9 @@ const deleteData = async () => {
 };
 ```
 
-## create controllers
+# create controllers
+
+## get reviews
 
 **controllers/reviews.js**
 
