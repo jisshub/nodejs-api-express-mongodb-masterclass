@@ -167,7 +167,7 @@ app.use('/api/v1/reviews', reviews);
 ```javascript
 // @desc - GET a single review
 // @route - GET /api/v1/reviews/:id
-// @access - Private
+// @access - Public
 exports.getSingleReview = asyncHandler(async (req, res, next) => {
   // get review and polulate the result with bootcamp name, description
   const review = await Review.findById(req.params.id).populate(
