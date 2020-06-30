@@ -224,13 +224,29 @@ exports.createReview = asyncHandler(async (req, res, next) => {
   if (req.user.role !== 'user') {
     return next(
       new ErrorResponse(
-        `user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`
+        `user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`,
+        401
       )
     );
   }
 
-  // add review if role is 'user'
-  const review = await Review.create(req.body);
+  // get review written by current user
+  let review = await Review.findOne({
+    user: req.user.id,
+  });
+
+  // a user can give one review for a bootcamp - if a review added by current user,
+  if (review) {
+    return next(
+      new ErrorResponse(
+        `user ${req.user.id} cant post multiple reviews for bootcamp`,
+        400
+      )
+    );
+  }
+
+  // if no review added by the current user then add new review
+  review = await Review.create(req.body);
 
   // send resposne
   res.status(201).json({
@@ -266,6 +282,10 @@ router.route('/').post(protect, authorize('user'), createReview);
 **Screenshot 4: set authorization type**
 
 ![image](./screenshots/review-create-2.png 'image')
+
+**Screenshot 5: Throw error when user try adding multiple reviews**
+
+![image](./screenshots/postman66.png 'image')
 
 ---
 
