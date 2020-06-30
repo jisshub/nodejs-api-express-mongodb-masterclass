@@ -253,7 +253,7 @@ BootcampSchema.pre('remove', async function (next) {
 });
 ```
 
-- we cant access the this.\_id of bootcamp since we use pre() ie before deleting the bootcamp
+- we can access the this.\_id of bootcamp since we use pre() ie before deleting the bootcamp
 
 - **Next to trigger this middleware we have use remove() in controllers**.
 
