@@ -387,8 +387,18 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
 **routes/review.js**
 
 ```javascript
-router.route('/:id').put(updateReview);
+router.route('/:id').put(protect, authorize('user')updateReview);
 ```
+
+## Screenshots:
+
+**Screenshot 1: PUT REQUEST**
+
+![image](./screenshots/review_update-1.png 'image')
+
+**Screenshot 2:**
+
+![image](./screenshots/review-update-2.png 'image')
 
 ---
 
@@ -460,3 +470,15 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
 ```javascript
 router.route('/:id', protect, authorize('user'), deleteReview);
 ```
+
+## Screenshots:
+
+**Screenshot 1: delete request**
+
+![image](./screenshots/delete_review-1.png 'image')
+
+**Screenshot 2: set Authorizatoin type**
+
+![image](./screenshots/delete_review-2.png 'image')
+
+---
