@@ -475,10 +475,10 @@ router.route('/:id', protect, authorize('user'), deleteReview);
 
 **Screenshot 1: delete request**
 
-![image](./screenshots/delete_review-1.png 'image')
+![image](./screenshots/delete-review-1.png 'image')
 
 **Screenshot 2: set Authorizatoin type**
 
-![image](./screenshots/delete_review-2.png 'image')
+![image](./screenshots/delete-review-2.png 'image')
 
 ---
