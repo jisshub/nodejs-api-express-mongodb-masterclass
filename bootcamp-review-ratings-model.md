@@ -352,6 +352,6 @@ ReviewSchema.pre('remove', function () {
 - create new bootcamp
 - login as user role.
 - next create a review for newly created bootcamp.
-- login as another user role
+- login as another user role since a user can add only one review.
 - next add new review for the same bootcamp.
-- get all bootcamps- we can see the _averageRating_ field under the same bootcamp
+- get all bootcamps- we can see the _averageRating_ field under that bootcamp.
