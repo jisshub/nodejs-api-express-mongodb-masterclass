@@ -1,23 +1,23 @@
-const mongoose = require("mongoose");
-const Bootcamp = require("./Bootcamp");
+const mongoose = require('mongoose');
+const Bootcamp = require('./Bootcamp');
 
 // define a Schema for review
 const ReviewSchema = mongoose.Schema({
     title: {
         type: String,
-        required: [true, "please add a review title"],
-        maxlength: 50
+        required: [true, 'please add a review title'],
+        maxlength: 50,
     },
     text: {
         type: String,
-        required: [true, "please add some text"],
-        maxlength: 500
+        required: [true, 'please add some text'],
+        maxlength: 500,
     },
     rating: {
         type: Number,
-        required: [true, "please give a rating b/w 1 and 10"],
+        required: [true, 'please give a rating b/w 1 and 10'],
         min: 1,
-        max: 10
+        max: 10,
     },
     createdAt: {
         type: Date,
@@ -26,58 +26,61 @@ const ReviewSchema = mongoose.Schema({
     bootcamp: {
         type: mongoose.Schema.ObjectId,
         ref: 'Bootcamp',
-        required: true
+        required: true,
     },
     user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
-        required: true
-    }
+        required: true,
+    },
 });
 
-// find average of all ratings in a bootcamp.
+// find average ratings of courses in a bootcamp. - use statics
 ReviewSchema.statics.getAverageRating = async function (bootcampId) {
-    const obj = await this.aggregate([
+    const obj = await this.aggregate(
+        [
             // match the bootcamp field in Reiview model with bootcampId
             {
                 $match: {
-                    bootcamp: bootcampId
-                }
+                    bootcamp: bootcampId,
+                },
             },
             // group the id and averageRating
             {
                 $group: {
                     _id: '$bootcamp',
                     averageRating: {
-                        $avg: '$rating'
-                    }
-                }
-            }
+                        $avg: '$rating',
+                    },
+                },
+            },
         ]
         // we gets an array of one object with bootcamp id and averageRating.
     );
     // save to db,
     try {
         // find bootcamp and update it by adding averageRating field
-        this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
-            averageRating: obj[0].averageRating
-        })
+        await Bootcamp.findByIdAndUpdate(bootcampId, {
+            averageRating: obj[0].averageRating,
+        });
     } catch (error) {
         console.log(error);
     }
 
     console.log(obj); // obj is an array of single object
-}
+};
 
 // call static method after saving to db & before removing from db
-ReviewSchema.post("save", function () {
-    // 
-    this.constructor.getAverageRating(this.bootcamp)
-})
+ReviewSchema.post('save', function () {
+    // call static methiod on constructor
+    this.constructor.getAverageRating(this.bootcamp);
+});
 
-ReviewSchema.pre("remove", function () {
-    this.constructor.getAverageRating(this.bootcamp)
-})
+ReviewSchema.pre('remove', function () {
+    // call static methiod on constructor
+
+    this.constructor.getAverageRating(this.bootcamp);
+});
 
 // export the schema
-module.exports = mongoose.model("Review", ReviewSchema)
+module.exports = mongoose.model('Review', ReviewSchema);

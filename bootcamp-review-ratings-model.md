@@ -150,11 +150,11 @@ app.use('/api/v1/reviews', reviews);
 
 **Screenshot: get all revieews**
 
-![image](./screenshots/p.png, 'image')
+![image](./screenshots/p.png 'image')
 
 **Screenshot: get reviews of a bootcamp**
 
-![image](./screenshots/p1.png, 'image')
+![image](./screenshots/p1.png 'image')
 
 ---
 
@@ -268,3 +268,70 @@ router.route('/').post(protect, authorize('user'), createReview);
 ![image](./screenshots/review-create-2.png 'image')
 
 ---
+
+# Get Average rating of all courses in a bootcamp
+
+**models/Review.js**
+
+```javascript
+// find average ratings of courses in a bootcamp. - use statics
+ReviewSchema.statics.getAverageRating = async function (bootcampId) {
+  const obj = await this.aggregate(
+    [
+      // match the bootcamp field in Reiview model with bootcampId
+      {
+        $match: {
+          bootcamp: bootcampId,
+        },
+      },
+      // group the id and averageRating
+      {
+        $group: {
+          _id: '$bootcamp',
+          averageRating: {
+            $avg: '$rating',
+          },
+        },
+      },
+    ]
+    // we gets an array of one object with bootcamp id and averageRating.
+  );
+  // save to db,
+  try {
+    // find bootcamp and update it by adding averageRating field
+    await Bootcamp.findByIdAndUpdate(bootcampId, {
+      // v access averageRating property from obj.
+      averageRating: obj[0].averageRating,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(obj); // obj is an array of single object -
+};
+
+// call static method after saving to db & before removing from db
+ReviewSchema.post('save', function () {
+  // call static methiod on constructor
+
+  this.constructor.getAverageRating(this.bootcamp);
+});
+
+ReviewSchema.pre('remove', function () {
+  // call static methiod on constructor
+
+  this.constructor.getAverageRating(this.bootcamp);
+});
+```
+
+**Steps to Follow:**
+
+- first delete all data from collections
+- register new users - 1 publisher, 2 users role
+- Login as publisher role
+- create new bootcamp
+- login as user role.
+- next create a review for newly created bootcamp.
+- login as another user role
+- next add new review for the same bootcamp.
+- get all bootcamps- we can see the _averageRating_ field under the same bootcamp
