@@ -398,13 +398,13 @@ router.route('/:id').put(protect, authorize('user')updateReview);
 
 ![image](./screenshots/review_update-1.png 'image')
 
-**Screenshot 2:**
+**Screenshot 2: Set Authorization Type**
 
 ![image](./screenshots/review-update-2.png 'image')
 
 ---
 
-# cascade delete reviews while bootcamp is deleted
+# cascade-delete reviews while bootcamp is deleted
 
 **models/Bootcamp.js**
 
