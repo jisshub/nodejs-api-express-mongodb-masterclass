@@ -222,16 +222,6 @@ exports.createReview = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // if user role is not 'user'
-  if (req.user.role !== 'user') {
-    return next(
-      new ErrorResponse(
-        `user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`,
-        401
-      )
-    );
-  }
-
   // get review written by current user
   let review = await Review.findOne({
     user: req.user.id,
@@ -376,7 +366,7 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
 
 
     // check loggeed in user is the owner of this review
-    if (review.user !== req.user.id) {
+    if (review.user != req.user.id) {
         return next(new ErrorResponse(`user ${req.user.id} is not the owner of the review ${review._id}`, 401))
     }
 
