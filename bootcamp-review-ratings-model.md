@@ -375,7 +375,7 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
     }
 
 
-    // check loggeed in user is the onwer of this review
+    // check loggeed in user is the owner of this review
     if (review.user !== req.user.id) {
         return next(new ErrorResponse(`user ${req.user.id} is not the owner of the review ${review._id}`, 401))
     }
@@ -464,7 +464,7 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // check loggeed in user is the onwer of this review
+  // check loggeed in user is the owner of this review
   if (review.user !== req.user.id) {
     return next(
       new ErrorResponse(
