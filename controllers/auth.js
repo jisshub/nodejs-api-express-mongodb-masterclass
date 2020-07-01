@@ -80,6 +80,14 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     });
 });
 
+// @desc - logout user, clear cookie
+// @route - POST /api/v1/auth/logout
+// @access - Private
+
+exports.logout = asyncHandler(async (req, res, next) => {
+
+})
+
 // @desc - update user details
 // @routes - PUT /api/v1/auth/updatedetails
 // @access - Private
