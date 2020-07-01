@@ -222,16 +222,6 @@ exports.createReview = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // if user role is not 'user'
-  if (req.user.role !== 'user') {
-    return next(
-      new ErrorResponse(
-        `user role ${req.user.role} is not authorized to add a review for bootcamp ${bootcamp._id}`,
-        401
-      )
-    );
-  }
-
   // get review written by current user
   let review = await Review.findOne({
     user: req.user.id,
