@@ -110,9 +110,18 @@ exports.createReview = asyncHandler(async (req, res, next) => {
 // @access - Private
 exports.updateReview = asyncHandler(async (req, res, next) => {
     let review = await Review.findById(req.params.id)
+    console.log(review.user, req.user.id);
+
+    // check review exist/not
     if (!review) {
         return next(new ErrorResponse(`review with id ${req.params.id} not found`, 404));
     }
+
+    // check loggeed in user is the onwer of this review
+    if (review.user !== req.user.id) {
+        return next(new ErrorResponse(`user ${req.user.id} is not the owner of the review ${review._id}`, 401))
+    }
+
     review = await Review.findOneAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
@@ -132,6 +141,11 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
     if (!review) {
         return next(new ErrorResponse(`review with id ${req.params.id} not found`, 404))
     };
+
+    // check the logged in user is the owenr of the review
+    if (review.user !== req.user.id) {
+        return next(new ErrorResponse(`user ${req.user.id} not the owner of the review ${review._id}`, 401))
+    }
     await Review.findOneAndDelete(req.params.id);
     res.status(200).json({
         success: true,
