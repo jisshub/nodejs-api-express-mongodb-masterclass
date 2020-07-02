@@ -53,6 +53,6 @@ app.use(
 
 - result will be resource not found error.
 
-- here v cant authenticate since v used _mongo express santize_ in **server.js**
+- here v cant authenticate since v used _mongo express santize_ package in **server.js**
 
 ---
