@@ -57,7 +57,7 @@ app.use(
 
 ---
 
-## XSS Protection ans Security Headers
+# XSS Protection ans Security Headers
 
 - using helmet package
 - Helmet helps you secure your Express apps by setting various HTTP headers
