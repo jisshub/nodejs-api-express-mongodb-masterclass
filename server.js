@@ -21,7 +21,7 @@ const connectDB = require('./config/db');
 
 const fileupload = require('express-fileupload');
 const cookieParser = require("cookie-parser");
-
+const mongoSanitize = require('express-mongo-sanitize');
 
 
 // configure dotenv - laod env variables
@@ -54,6 +54,13 @@ app.use(cookieParser())
 
 // set public as our static folder,
 app.use(express.static(path.join(path.dirname('./'), 'public')));
+
+// To remove data, use:
+app.use(mongoSanitize());
+// replace prohibited characters with _,
+app.use(mongoSanitize({
+  replaceWith: '_'
+}));
 
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
