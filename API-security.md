@@ -214,6 +214,10 @@ app.use(hpp());
 
 Cross-Origin Resource Sharing (CORS) is a mechanism that uses additional HTTP headers to tell browsers to give a web application running at one origin, access to selected resources from a different origin. A web application executes a cross-origin HTTP request when it requests a resource that has a different origin.
 
+more details on:
+
+[cors](https://www.npmjs.com/package/cors)
+
 - Installation
 
 ```bash
