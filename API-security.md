@@ -1,6 +1,6 @@
 # Prevent NoSql Injection & Sanitize Data
 
-![Hacking Nodejs and mongodb](https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
+[Hacking Nodejs and mongodb](https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
 
 ## Screenshots:
 
@@ -22,7 +22,7 @@
 
 ## express-mongo-sanitize
 
-- to bypass this issue we use ![mongo-express-santize](https://www.npmjs.com/package/express-mongo-sanitize) package.
+- to bypass this issue we use [express-mongo-santize](https://www.npmjs.com/package/express-mongo-sanitize) package.
 
 ```bash
 npm i express-mongo-sanitize
@@ -53,6 +53,6 @@ app.use(
 
 - result will be resource not found error.
 
-- here v cant authenticate since v used _mongo express santize_ package in **server.js**
+- here v cant authenticate since v used express-mongo-santize_ package in **server.js**
 
 ---
