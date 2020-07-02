@@ -138,6 +138,6 @@ npm run dev
 
 ![image](./screenshots/clean-1.png 'image')
 
-- Here those script tags will not be saved to our database. it will be marked with &lt; operator
+- Here those script tags will not be saved to our database. it will be marked with &lt operator
 
 ---
