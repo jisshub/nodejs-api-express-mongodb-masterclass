@@ -7,8 +7,8 @@ const path = require('path');
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
 const auth = require('./routes/auth');
-const users = require("./routes/users");
-const reviews = require("./routes/reviews");
+const users = require('./routes/users');
+const reviews = require('./routes/reviews');
 
 // ewquire erroHandler middleware
 const errorHandler = require('./middleware/error');
@@ -20,9 +20,10 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 
 const fileupload = require('express-fileupload');
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
-
+const helmet = require('helmet');
+const xssClean = require('xss-clean');
 
 // configure dotenv - laod env variables
 dotenv.config({
@@ -48,9 +49,7 @@ if (process.env.NODE_ENV === 'development') {
 // use express-fileupload module here
 app.use(fileupload());
 // use cookieparser
-app.use(cookieParser())
-
-
+app.use(cookieParser());
 
 // set public as our static folder,
 app.use(express.static(path.join(path.dirname('./'), 'public')));
@@ -58,16 +57,23 @@ app.use(express.static(path.join(path.dirname('./'), 'public')));
 // To remove data, use:
 app.use(mongoSanitize());
 // replace prohibited characters with _,
-app.use(mongoSanitize({
-  replaceWith: '_'
-}));
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  })
+);
+// set security headers
+app.use(helmet());
+
+// sanitize user inputs
+app.use(xssClean());
 
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);
 // use courses router
 app.use('/api/v1/courses', courses);
 // use auth router
-app.use("/api/v1/auth", auth);
+app.use('/api/v1/auth', auth);
 // use admin user route
 app.use('/api/v1/auth/users', users);
 // use reviews routes

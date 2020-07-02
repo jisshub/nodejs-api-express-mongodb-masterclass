@@ -53,6 +53,91 @@ app.use(
 
 - result will be resource not found error.
 
-- here v cant authenticate since v used express-mongo-santize_ package in **server.js**
+- here v cant authenticate since v used express-mongo-santize\_ package in **server.js**
+
+---
+
+## XSS Protection ans Security Headers
+
+- using helmet package
+- Helmet helps you secure your Express apps by setting various HTTP headers
+
+[Helmet Package](https://helmetjs.github.io/docs/)
+
+[Helmet NPM](https://www.npmjs.com/package/helmet)
+
+```bash
+npm i helmet
+
+```
+
+- use helmet in server.js
+
+**server.js**
+
+```javascript
+// require helmet
+const helmet = require('helmet');
+
+// use this before defining routes
+
+// SET SECURITY HEADERS
+app.use(helemt());
+```
+
+**Screenshot - send a get request to fetch boocamps**
+![image](./screenshots/headers-1.png 'image')
+
+- you can view new Headers were added to make the app more secure.
+
+---
+
+## Node.Js XSS-Clean
+
+- middleware to sanitize user input coming from POST body, GET queries, and url params
+
+[Nodejs XSS-Clean](https://github.com/jsonmaur/xss-clean)
+
+[xss-clean npm](https://www.npmjs.com/package/xss-clean)
+
+- Why we use this?
+
+**Screenshot**
+
+![image](./screenshots/clean.png 'image')
+
+Here v can view the bootcamp ame field also include some script tag. it might be added accidently by the user, but we have to clean this user sort of bad inputs before saved to database.
+So we use xss-clean middleware
+
+#### installation
+
+```bash
+npm i xss-clean
+```
+
+#### Usage
+
+**server.js**
+
+```javascript
+const xssClean = require('xss-clean');
+// sanitize user inputs - use the below bfore any routes
+
+app.use(xssClean());
+```
+
+- run node server
+
+```bash
+npm run dev
+```
+
+- Now try adding a bootcamp with name field having some unwanted script tag.
+
+**Screenshot: 1 -send post request**
+
+![image](./screenshots/clean-1.png 'image')
+
+- Here those script tags will not be saved to our database.
 
 ---
