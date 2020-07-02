@@ -30,7 +30,7 @@ npm i express-mongo-sanitize
 
 **server.js**
 
-- add this before defining the routes.
+- add this in server.js file before defining the routes.
 
 ```javascript
 // To remove data, use:
