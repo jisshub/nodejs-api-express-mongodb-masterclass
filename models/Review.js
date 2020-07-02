@@ -78,7 +78,6 @@ ReviewSchema.post('save', function () {
 
 ReviewSchema.pre('remove', function () {
     // call static methiod on constructor
-
     this.constructor.getAverageRating(this.bootcamp);
 });
 

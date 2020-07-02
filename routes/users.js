@@ -27,4 +27,4 @@ router.route('/:id')
     .delete(removeUser)
     .get(getSingleUser)
 
-module.exports = router
+module.exports = router;

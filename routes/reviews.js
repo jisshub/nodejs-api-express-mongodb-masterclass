@@ -17,6 +17,7 @@ const router = express.Router({
 
 // routes
 router.route("/").get(getReviews).post(protect, authorize('user'), createReview);
+
 router.route("/:id").get(getSingleReview).put(protect, authorize('user'), updateReview).delete(protect, authorize('user'), deleteReview);
 
 // export the router
