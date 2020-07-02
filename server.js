@@ -24,6 +24,9 @@ const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
 
 // configure dotenv - laod env variables
 dotenv.config({
@@ -67,6 +70,20 @@ app.use(helmet());
 
 // sanitize user inputs
 app.use(xssClean());
+
+// set rate limiter
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // maximum 100 request
+  // ie max 100 in 15 minutes
+});
+app.use(limiter);
+
+// use hpp against HTTP Parameter Pollution attacks
+app.use(hpp());
+
+// enable all cors request
+app.use(cors());
 
 // use express router
 app.use('/api/v1/bootcamps', bootcamps);

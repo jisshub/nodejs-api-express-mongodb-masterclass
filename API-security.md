@@ -141,3 +141,96 @@ npm run dev
 - Here those script tags will not be saved to our database. it will be marked with &lt operator
 
 ---
+
+# Rate Limit, HPP & CORS
+
+## Express rate limit middleware
+
+- Basic rate-limiting middleware for Express. Use to limit repeated requests to public APIs and/or endpoints such as password reset.
+
+[express-rate-limit](https://www.npmjs.com/package/express-rate-limit)
+
+- Installation
+
+```bash
+npm i express-rate-limit
+```
+
+- Usage
+
+**server.js**
+
+```javascript
+const rateLimit = require('express-rate-limit';
+// set rate limiter
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // maximum 1 request in 15 minutes
+});
+// use before defining route
+app.use(limiter);
+```
+
+**Screenshot 1: when request exceeds rate limit**
+
+![image](./screenshots/rate-1.png 'image')
+
+**Screenshot 2: View the Rate limit and remaining rate limit in Header**
+
+![image](./screenshots/imageedit_2_3001020271.png 'image')
+
+---
+
+## HPP
+
+- Express middleware to protect against HTTP Parameter Pollution attacks.
+
+more details on:
+
+[hpp](https://www.npmjs.com/package/hpp)
+
+- Installation
+
+```bash
+npm i hpp
+```
+
+- Usage
+
+**server.js**
+
+```javascript
+const hpp = require('hpp');
+// use hpp against HTTP Parameter Pollution attacks
+// use before defining route
+app.use(hpp());
+```
+
+---
+
+## CORS
+
+- Definition
+
+Cross-Origin Resource Sharing (CORS) is a mechanism that uses additional HTTP headers to tell browsers to give a web application running at one origin, access to selected resources from a different origin. A web application executes a cross-origin HTTP request when it requests a resource that has a different origin.
+
+- Installation
+
+```bash
+npm i cors
+```
+
+- Usage
+
+**server.js**
+
+```javascript
+const cors = require('cors');
+
+// use before defining routes
+app.use(cors());
+```
+
+- now we can access resources from other origin from our application.
+
+---
