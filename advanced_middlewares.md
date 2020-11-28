@@ -1,6 +1,6 @@
 # using a middleware to do similar functionalities in various models
 
-- Similar functionalities in diif controllers of Model are implemented in a middleare rather than repeating that same thing in controllers.
+- Similar functionalities in diif controllers of Model are implemented in a middleware rather than repeating that same thing in controllers.
 
 - create a middleware _advancedResults.js_
 
